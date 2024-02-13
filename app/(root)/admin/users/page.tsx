@@ -8,15 +8,15 @@ export const metadata = {
   title: "Users",
 };
 
-async function getAllUsers() {
-  const res = await authService.getAllUsers();
-  if (!res.data) {
-    return null;
-  }
-  return res.data.Data;
-}
+// async function getAllUsers() {
+//   const res = await authService.getAllUsers();
+//   if (!res.data) {
+//     return null;
+//   }
+//   return res.data.Data;
+// }
 const UsersAdmin = async () => {
-  const dataUsers = await getAllUsers();
+  // const dataUsers = await getAllUsers();
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -24,7 +24,8 @@ const UsersAdmin = async () => {
           <h1>Users</h1>
         </MyCard>
         <MyCard>
-          <DataTable columns={columns} data={dataUsers} />
+          <h1>apa</h1>
+          {/* <DataTable columns={columns} data={dataUsers} /> */}
         </MyCard>
       </div>
     </>
