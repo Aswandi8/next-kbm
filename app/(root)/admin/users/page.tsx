@@ -8,7 +8,7 @@ export const metadata = {
   title: "Users",
 };
 
-async function getAllUsers() {
+async function getAllDataUsers() {
   const res = await authService.getAllUsers();
   if (!res.data) {
     return null;
@@ -16,7 +16,7 @@ async function getAllUsers() {
   return res.data.Data;
 }
 const UsersAdmin = async () => {
-  const dataUsers = await getAllUsers();
+  const dataUsers = await getAllDataUsers();
   return (
     <>
       <div className="flex gap-4 flex-col">

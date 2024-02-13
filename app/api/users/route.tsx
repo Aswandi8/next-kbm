@@ -5,12 +5,10 @@ import prisma from "@/prisma";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
-    // const data = await prisma.user.findMany({}, { "id": 0, "password": 0 });
     const data = await prisma.user.findMany({
-      select: { username: true, email: true, role: true, type: true },
       where: {
         role: {
-          notIn: ["admin"],
+          notIn: ["admin", "super_admin"],
         },
       },
     });

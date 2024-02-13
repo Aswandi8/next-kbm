@@ -41,16 +41,16 @@ export default function withAuth(
         if (token.role === "member" && authPage.includes(pathname)) {
           return NextResponse.redirect(new URL("/member/account", req.url));
         }
-        if (token.role === "marketing" && onlyMarketing.includes(pathname)) {
+        if (token.role === "marketing" && authPage.includes(pathname)) {
           return NextResponse.redirect(new URL("/marketing/home", req.url));
         }
-        if (token.role === "logistic" && onlyLogistic.includes(pathname)) {
+        if (token.role === "logistic" && authPage.includes(pathname)) {
           return NextResponse.redirect(new URL("/logistic/home", req.url));
         }
-        if (token.role === "teknisi" && onlyTeknisi.includes(pathname)) {
+        if (token.role === "teknisi" && authPage.includes(pathname)) {
           return NextResponse.redirect(new URL("/teknisi/home", req.url));
         }
-        if (token.role === "keuangan" && onlyKeuangan.includes(pathname)) {
+        if (token.role === "keuangan" && authPage.includes(pathname)) {
           return NextResponse.redirect(new URL("/keuangan/home", req.url));
         }
 
