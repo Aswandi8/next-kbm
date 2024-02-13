@@ -3,10 +3,7 @@ import authService from "@/lib/service/authService";
 import TabelUsers from "./tabelUsers";
 import { DataTable } from "@/app/components/data-tabel/data-table";
 import { columns } from "./columns";
-
-export const metadata = {
-  title: "Users",
-};
+import Head from "next/head";
 
 async function getAllDataUsers() {
   const res = await authService.getAllUsers();
@@ -19,6 +16,10 @@ const UsersAdmin = async () => {
   const dataUsers = await getAllDataUsers();
   return (
     <>
+      <Head>
+        <title>My page title</title>
+        <meta property="og:title" content="My page title" key="title" />
+      </Head>
       <div className="flex gap-4 flex-col">
         <MyCard>
           <h1>Users</h1>

@@ -3,7 +3,7 @@ import axios from "axios";
 const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
-  "Cache-Control": "no-cache",
+  "Cache-Control": "no-store",
   Expires: 0,
 };
 
