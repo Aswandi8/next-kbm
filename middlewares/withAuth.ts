@@ -27,7 +27,7 @@ export default function withAuth(
       const token = await getToken({
         req,
         secret: process.env.NEXTAUTH_SECRET,
-        // secureCookie: true,
+        secureCookie: true,
       });
       if (!token && !authPage.includes(pathname)) {
         const url = new URL("/auth/sign-in", req.url);
