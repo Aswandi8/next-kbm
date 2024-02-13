@@ -3,14 +3,14 @@ import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
 import { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
-
-export const revalidate = 1;
+export const dynamic = "force-dynamic";
+// export const revalidate = 1;
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { email: string } }
 ) {
   try {
-    // await connectToDatabase();
+    await connectToDatabase();
     const emailUser = await prisma.user.findUnique({
       where: {
         email: params.email,
