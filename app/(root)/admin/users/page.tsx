@@ -4,7 +4,7 @@ import TabelUsers from "./tabelUsers";
 import { DataTable } from "@/app/components/data-tabel/data-table";
 import { columns } from "./columns";
 import Head from "next/head";
-
+export const dynamic = "force-dynamic";
 async function getAllDataUsers() {
   const res = await authService.getAllUsers();
   if (!res.data) {

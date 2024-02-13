@@ -4,6 +4,7 @@ import prisma from "@/prisma";
 import { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
+export const revalidate = 1;
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { email: string } }
