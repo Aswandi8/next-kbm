@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
-
+export const dynamic = "force-dynamic";
+export const revalidate = 1;
+import { revalidatePath } from "next/cache";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
@@ -13,6 +15,8 @@ export async function GET(request: NextRequest) {
       },
     });
     const dataUsers = JSON.parse(JSON.stringify(data));
+    const path = request.nextUrl.pathname;
+    revalidatePath(path);
     return NextResponse.json(
       {
         message: "Success",

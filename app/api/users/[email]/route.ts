@@ -3,8 +3,7 @@ import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
 import { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
-export const dynamic = "force-dynamic";
-// export const revalidate = 1;
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { email: string } }
@@ -26,6 +25,7 @@ export async function PATCH(
         }
       );
     }
+
     const body: User = await request.json();
     const updateUsers = await prisma.user.update({
       where: {
