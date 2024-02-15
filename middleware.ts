@@ -13,6 +13,8 @@ export default withAuth(mainMiddleware, [
   "logistic",
   "teknisi",
   "keuangan",
+  "superadmin",
+  "superuser",
 ]);
 
 export const config = {

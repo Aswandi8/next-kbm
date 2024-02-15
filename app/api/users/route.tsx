@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
 export const dynamic = "force-dynamic";
-export const revalidate = 1;
 import { revalidatePath } from "next/cache";
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +9,7 @@ export async function GET(request: NextRequest) {
     const data = await prisma.user.findMany({
       where: {
         role: {
-          notIn: ["admin", "super_admin"],
+          notIn: ["admin"],
         },
       },
     });

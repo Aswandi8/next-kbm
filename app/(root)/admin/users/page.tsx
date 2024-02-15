@@ -16,10 +16,6 @@ const UsersAdmin = async () => {
   const dataUsers = await getAllDataUsers();
   return (
     <>
-      <Head>
-        <title>My page title</title>
-        <meta property="og:title" content="My page title" key="title" />
-      </Head>
       <div className="flex gap-4 flex-col">
         <MyCard>
           <h1>Users</h1>

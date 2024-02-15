@@ -125,6 +125,8 @@ const UpdateUsers = ({ dataUsers }: any) => {
                       <SelectItem value="logistic">Logistic</SelectItem>
                       <SelectItem value="keuangan">Keuangan</SelectItem>
                       <SelectItem value="teknisi">Teknisi</SelectItem>
+                      <SelectItem value="superadmin">Super Admin</SelectItem>
+                      <SelectItem value="superuser">Super User</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

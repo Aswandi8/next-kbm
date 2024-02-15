@@ -15,6 +15,8 @@ const onlyTeknisi = ["teknisi"];
 const onlyKeuangan = ["keuangan"];
 const authPage = ["auth"];
 const home = ["/"];
+const onlySuperAdmin = ["superadmin"];
+const onlySuperUser = ["superuser"];
 
 export default function withAuth(
   middleware: NextMiddleware,
@@ -53,6 +55,20 @@ export default function withAuth(
         if (token.role === "keuangan" && authPage.includes(pathname)) {
           return NextResponse.redirect(new URL("/keuangan/home", req.url));
         }
+        // Faisal Role
+        if (token.role === "superadmin" && authPage.includes(pathname)) {
+          return NextResponse.redirect(new URL("/superadmin/home", req.url));
+        }
+        if (token.role === "superuser" && authPage.includes(pathname)) {
+          return NextResponse.redirect(new URL("/superuser/home", req.url));
+        }
+        if (token.role !== "superadmin" && onlySuperAdmin.includes(pathname)) {
+          return NextResponse.redirect(new URL("/auth/sign-in", req.url));
+        }
+        if (token.role !== "superuser" && onlySuperUser.includes(pathname)) {
+          return NextResponse.redirect(new URL("/auth/sign-in", req.url));
+        }
+        // End Faisal Role
 
         if (token.role !== "admin" && onlyAdmin.includes(pathname)) {
           return NextResponse.redirect(new URL("/member/account", req.url));

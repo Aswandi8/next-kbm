@@ -1,5 +1,10 @@
 import { FaRegUser } from "react-icons/fa";
 import { IoHomeOutline } from "react-icons/io5";
+import { MdOutlineMapsHomeWork, MdOutlineAddHome } from "react-icons/md";
+import { HiOutlineHomeModern } from "react-icons/hi2";
+import { RiHome8Line } from "react-icons/ri";
+import { LiaLayerGroupSolid } from "react-icons/lia";
+import { RiBarChartGroupedFill } from "react-icons/ri";
 
 export const linksAdmin = [
   {
@@ -72,6 +77,72 @@ export const linksLogistic = [
         name: "Peminjaman",
         path: "/logistic/peminjaman",
         icon: <IoHomeOutline />,
+      },
+    ],
+  },
+];
+
+export const linksSuperAdmin = [
+  {
+    title: "Dashboard",
+    links: [
+      {
+        name: "home",
+        path: "/superadmin/home",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "account",
+        path: "/superadmin/account",
+        icon: <FaRegUser />,
+      },
+    ],
+  },
+
+  {
+    title: "Kost",
+    links: [
+      {
+        name: "data kost",
+        path: "/superadmin/kost",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "tipe kost",
+        path: "/superadmin/kost/tipe-kost",
+        icon: <RiHome8Line />,
+      },
+    ],
+  },
+
+  {
+    title: "Kriteria",
+    links: [
+      {
+        name: "data Kriteria",
+        path: "/superadmin/kriteria",
+        icon: <MdOutlineAddHome />,
+      },
+      {
+        name: "data subkriteria",
+        path: "/superadmin/kriteria/sub-kriteria",
+        icon: <LiaLayerGroupSolid />,
+      },
+    ],
+  },
+
+  {
+    title: "Metode moora",
+    links: [
+      {
+        name: "penilaian kost",
+        path: "/superadmin/moora/penilaian-kost",
+        icon: <MdOutlineMapsHomeWork />,
+      },
+      {
+        name: "metode moora",
+        path: "/superadmin/moora",
+        icon: <RiBarChartGroupedFill />,
       },
     ],
   },
