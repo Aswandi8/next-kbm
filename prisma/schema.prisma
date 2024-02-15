@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js" 
 }
 
 datasource db {
@@ -20,4 +20,26 @@ model User {
   type      String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now())
+}
+
+model dataSparepart{
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  sparepart String
+  produksi  String
+  types     dataType[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  
+}
+
+model dataType{
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  type         String
+  merek        String?
+  stock        Int
+  spesifikasi  String
+  product      dataSparepart   @relation(fields: [productId], references: [id])
+  productId    String          @db.ObjectId
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
 }

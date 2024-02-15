@@ -4,13 +4,13 @@ type labelParams = {
 };
 const MyLabel = ({ title, className }: labelParams) => {
   return (
-    <div>
+    <>
       <div
-        className={`${className} text-sm font-semibold tracking-wider text-gray-400`}
+        className={`${className} text-sm font-normal tracking-wider text-gray-400`}
       >
         {title}
       </div>
-    </div>
+    </>
   );
 };
 export default MyLabel;

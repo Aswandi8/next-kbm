@@ -1,7 +1,7 @@
 "use client";
 import FooterAdmin from "@/app/components/layout/footer";
 import NavbarAdmin from "@/app/components/layout/navbar";
-import SidebarAdmin from "@/app/components/admin/sidebar";
+import SidebarLogistic from "@/app/components/logistic/sidebar";
 
 import {
   Tooltip,
@@ -14,7 +14,7 @@ import ThemeSetting from "@/app/components/layout/themeSetting";
 import { useStateContext } from "@/context/ContextProvider";
 import { useEffect } from "react";
 
-export default function AdminLayout({
+export default function LogisticLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -44,7 +44,7 @@ export default function AdminLayout({
   }, [screenSize, setActiveMenu]);
   return (
     <>
-      <div className="flex relative bg-gray-200 dark:bg-slate-900">
+      <div className="flex relative bg-gray-100 dark:bg-slate-900">
         <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
           {themeSettings ? (
             ""
@@ -75,13 +75,13 @@ export default function AdminLayout({
         {activeMenu ? (
           <>
             <div className="w-72 sidebar fixed z-10 bg-gray-200 dark:bg-slate-800">
-              <SidebarAdmin />
+              <SidebarLogistic />
             </div>
           </>
         ) : (
           <>
             <div className="w-0">
-              <SidebarAdmin />
+              <SidebarLogistic />
             </div>
           </>
         )}
