@@ -5,21 +5,24 @@ type FileUploaderProps = {
   onFieldChange: (url: string) => void;
   imageUrl: string;
   setFiles: Dispatch<SetStateAction<File[]>>;
+  myImage: string;
 };
 
 import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { useUploadThing } from "@/lib/uploadthing/uploadthing";
-import MyImage from "./image";
 import { Button } from "@/components/ui/button";
 import { convertFileToUrl } from "@/lib/utils";
-import MyHeading from "./heading";
-import MyLabel from "./label";
+import MyImage from "@/app/components/ui/image";
+import MyHeading from "@/app/components/ui/heading";
+import MyLabel from "@/app/components/ui/label";
+import MyButton from "@/app/components/ui/button";
 
 export function FileUploader({
   imageUrl,
   onFieldChange,
   setFiles,
+  myImage,
 }: FileUploaderProps) {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
@@ -32,30 +35,31 @@ export function FileUploader({
   });
 
   return (
-    <div
-      {...getRootProps()}
-      className="flex flex-col overflow-hidden items-center justify-center rounded-xl h-72 bg-gray-300/50"
-    >
+    <div {...getRootProps()}>
       <input {...getInputProps()} className="cursor-pointer" />
-
-      {imageUrl ? (
-        <div className="flex h-full w-full justify-center border-2 border-dashed">
-          <MyImage
-            alt="image"
-            src={imageUrl}
-            className="w-full object-cover object-center h-auto rounded-xl"
-          />
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center">
-          <MdCloudUpload className="text-5xl mb-2" />
-          <MyHeading title="Drag photo here" />
-          <MyLabel title="SVG, PNG, JPG" className="mb-4" />
-          <Button type="button" className="rounded-full">
-            Select from computer
-          </Button>
-        </div>
-      )}
+      <div className="flex flex-col items-center justify-center">
+        {imageUrl ? (
+          <>
+            <MyImage
+              src={imageUrl}
+              alt="profile"
+              className="w-28 h-28 rounded-full mb-4 object-cover"
+            />
+            <MyHeading title="Drag photo here" />
+            <MyLabel title="SVG, PNG, JPG" className="mb-4" />
+          </>
+        ) : (
+          <>
+            <MyImage
+              src={myImage ?? "/assets/images/avatar.svg"}
+              alt="profile"
+              className="w-28 h-28 rounded-full mb-4 object-cover"
+            />
+            <MyHeading title="Drag photo here" />
+            <MyLabel title="SVG, PNG, JPG" className="mb-4" />
+          </>
+        )}
+      </div>
     </div>
   );
 }

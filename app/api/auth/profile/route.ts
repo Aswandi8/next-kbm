@@ -1,41 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
-import jwt from "jsonwebtoken";
-// export const dynamic = "force-dynamic";
-// import { revalidatePath } from "next/cache";
+import jwt, { JwtPayload } from "jsonwebtoken";
+export const dynamic = "force-dynamic";
+import { revalidatePath } from "next/cache";
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase();
     const token = request.headers.get("Authorization")?.split(" ")[1] || "";
-    const verifyToken = jwt.verify(token, process.env.NEXTAUTH_SECRET || "");
-    if (verifyToken) {
+    if (!token) {
       return NextResponse.json(
         {
-          message: "Access denied",
+          message: "Unauthorized - Token not provided",
         },
         {
-          status: 405,
-        }
-      );
-    } else {
-      return NextResponse.json(
-        {
-          message: "Access denied",
-        },
-        {
-          status: 404,
+          status: 401,
         }
       );
     }
-  } catch (error) {
+
+    const decoded = jwt.verify(
+      token,
+      process.env.NEXTAUTH_SECRET || ""
+    ) as JwtPayload;
+
+    // Perform any additional checks on the decoded token if needed
+
+    await connectToDatabase();
+    const dataProfile = await prisma.user.findFirst({
+      where: { id: decoded.id },
+    });
+    const path = request.nextUrl.pathname;
+    revalidatePath(path);
     return NextResponse.json(
       {
-        message: "Internal Server Error",
-        error: error,
+        data: dataProfile,
       },
       {
-        status: 500,
+        status: 200,
+      }
+    );
+  } catch (error: any) {
+    // Handle specific errors if needed
+    if (error.name === "TokenExpiredError") {
+      return NextResponse.json(
+        {
+          message: "Unauthorized - Token expired",
+        },
+        {
+          status: 401,
+        }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        message: "Unauthorized - Invalid token",
+      },
+      {
+        status: 401,
       }
     );
   } finally {

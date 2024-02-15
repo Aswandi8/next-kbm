@@ -12,28 +12,30 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { GoKey } from "react-icons/go";
+import MyProfile from "./profile";
 const AccountAdmin = () => {
   const { data: session } = useSession();
-  console.log(session);
-  const [profile, setProfile] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await authService.getProfile(
-        session?.user.access_token || ""
-      );
-      if (data.status !== 200) {
-        throw new Error(`HTTP error! status: ${data.status}`);
-      }
-      console.log(data.data);
-      setProfile(data);
-    };
+  const [profile, setProfile] = useState({});
+  const [loading, setLoading] = useState(true);
 
-    fetchData().catch((e) => {
-      // handle the error as needed
-      console.error("An error occurred while fetching the data: ", e);
-    });
-  }, [session]);
-  console.log(profile);
+  useEffect(() => {
+    if (session?.user.access_token && Object.keys(profile).length === 0) {
+      const fetchData = async () => {
+        try {
+          const { data } = await authService.getProfile(
+            session?.user.access_token || ""
+          );
+          setProfile(data);
+        } catch (error) {
+          console.error("An error occurred while fetching the data: ", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [profile, session]);
+
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -47,29 +49,7 @@ const AccountAdmin = () => {
 
         <div className="flex flex-col md:flex-row gap-4 no-wrap">
           <div className="flex flex-col w-full md:w-3/12 gap-4">
-            <MyCard>
-              <div className="flex overflow-hidden items-center justify-center">
-                <MyImage
-                  src={
-                    session?.user?.photo
-                      ? session?.user?.photo
-                      : "/assets/images/avatar.svg"
-                  }
-                  alt="profile"
-                  className="h-auto w-[20%] md:w-[50%] mx-auto"
-                />
-              </div>
-              <MyHeading
-                title={session?.user?.username ? session?.user?.username : ""}
-                className="mt-2 capitalize"
-              />
-              <MyLabel title={session?.user?.role ? session?.user?.role : ""} />
-              <MyParagraph>
-                Owner at Her Company Inc. Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Reprehenderit, eligendi dolorum sequi illum
-                qui unde aspernatur non deserunt
-              </MyParagraph>
-            </MyCard>
+            <MyProfile dataProfile={profile} />
             <MyCard>
               <MyHeading title="Similar Profiles" />
               <div className="grid grid-cols-3">
