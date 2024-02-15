@@ -9,17 +9,17 @@ import { FaPlus } from "react-icons/fa6";
 import { DataTable } from "./data-table";
 import sparepartService from "@/lib/service/sparepartService";
 
-async function getAllDataSparepart() {
-  const res = await sparepartService.getAllSparepart();
-  if (!res.data) {
-    return null;
-  }
-  return res.data.Data;
-}
+// async function getAllDataSparepart() {
+//   const res = await sparepartService.getAllSparepart();
+//   if (!res.data) {
+//     return null;
+//   }
+//   return res.data.Data;
+// }
 
 const SparepartLogistic = async () => {
-  const dataSparepart = await getAllDataSparepart();
-  console.log(dataSparepart);
+  // const dataSparepart = await getAllDataSparepart();
+  // console.log(dataSparepart);
   return (
     <div className="flex flex-col gap-4">
       <ComponentSeparator
@@ -43,7 +43,7 @@ const SparepartLogistic = async () => {
           </MySpan>
         </div>
         <MySeparator label="horizontal" />
-        <DataTable columns={columns} data={dataSparepart} />
+        {/* <DataTable columns={columns} data={dataSparepart} /> */}
       </MyCard>
     </div>
   );
