@@ -10,8 +10,7 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const data = await prisma.dataKost.findMany();
     const getData = JSON.parse(JSON.stringify(data));
-    const path = request.nextUrl.pathname;
-    revalidatePath(path);
+    const path = request.nextUrl.searchParams.get("path");
     revalidatePath("/", "layout");
     return NextResponse.json(
       {
