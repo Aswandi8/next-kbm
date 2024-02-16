@@ -63,3 +63,22 @@ model dataKost{
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
 }
+
+model Kriteria{
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  kriteria      String    @unique 
+  bobot         Int
+  subkriterias  SubKriteria[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+}
+
+model SubKriteria{
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  subkriteria   String    @unique 
+  bobot         Int
+  kriterias      Kriteria @relation(fields: [kriteriaId], references: [id])
+  kriteriaId    String @db.ObjectId
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+}

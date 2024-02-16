@@ -127,9 +127,9 @@ const AddKost = () => {
                 name="kost"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Kost</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="Kost" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -18,3 +18,21 @@ export type kostParams = {
   price: string;
   url: string;
 };
+
+export type kriteriaParams = {
+  kriteria: string;
+  bobot: number;
+};
+
+export type subkriteriaParams = {
+  id: string;
+  subkriteria: string;
+  bobot: string;
+  kriteriaId: string;
+  kriterias: [
+    {
+      kriteria: string;
+      bobot: string;
+    }
+  ];
+};

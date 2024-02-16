@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import { useStateContext } from "@/context/ContextProvider";
 import kostService from "@/lib/service/kostService";
+import kriteriaService from "@/lib/service/kriteriaService";
+import { kriteriaParams } from "@/types";
 import { AxiosError, AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -19,19 +21,22 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaTrashCan } from "react-icons/fa6";
 
-const DeleteKost = ({ deleteKost }: { deleteKost: any }) => {
+const DeleteKriteria = ({ deleteKriteria }: { deleteKriteria: any }) => {
   const router = useRouter();
   const session: any = useSession();
   const { currentColor } = useStateContext();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const handleDelete = async (kostId: string) => {
+  const handleDelete = async (kriteriaId: string) => {
     setLoading(true);
-    await kostService
-      .deleteKost(kostId, session.data?.user.access_token)
+    await kriteriaService
+      .deleteKriteria(kriteriaId, session.data?.user.access_token)
       .then((response: AxiosResponse) => {
         // Handle response
-        toast.success("Data kost deleted successfully", response.data.message);
+        toast.success(
+          "Data kriteria deleted successfully",
+          response.data.message
+        );
         setLoading(false);
         setOpen(false);
         router.refresh();
@@ -39,7 +44,7 @@ const DeleteKost = ({ deleteKost }: { deleteKost: any }) => {
       .catch((reason: AxiosError<{ additionalInfo: string }>) => {
         if (reason.response?.status === 404) {
           setLoading(false);
-          toast.error("Data kost does not exist in the Database");
+          toast.error("Data kriteria does not exist in the Database");
         } else if (reason.response?.status === 403) {
           setLoading(false);
           toast.error("Access denied");
@@ -66,8 +71,8 @@ const DeleteKost = ({ deleteKost }: { deleteKost: any }) => {
             <DialogDescription className="text-sm font-normal tracking-wide text-gray-400">
               Anda akan menghapus data berikut: <br />
               <br />
-              Kriteria : {deleteKost.kost} <br />
-              id :{deleteKost.id}
+              Kriteria : {deleteKriteria.kriteria} <br />
+              id :{deleteKriteria.id}
               <br />
               Apakah Anda yakin ingin melanjutkan penghapusan data ini? Tindakan
               ini tidak dapat dibatalkan.
@@ -82,7 +87,7 @@ const DeleteKost = ({ deleteKost }: { deleteKost: any }) => {
               disabled={loading ? true : false}
               className="!bg-red-500"
               customFunc={
-                loading ? () => {} : () => handleDelete(deleteKost.id)
+                loading ? () => {} : () => handleDelete(deleteKriteria.id)
               }
             />
           </DialogFooter>
@@ -92,4 +97,4 @@ const DeleteKost = ({ deleteKost }: { deleteKost: any }) => {
     </>
   );
 };
-export default DeleteKost;
+export default DeleteKriteria;

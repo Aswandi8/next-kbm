@@ -107,11 +107,6 @@ export const linksSuperAdmin = [
         path: "/superadmin/kost",
         icon: <HiOutlineHomeModern />,
       },
-      {
-        name: "tipe kost",
-        path: "/superadmin/kost/tipe-kost",
-        icon: <RiHome8Line />,
-      },
     ],
   },
 
