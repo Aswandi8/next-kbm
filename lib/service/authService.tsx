@@ -12,7 +12,8 @@ type updateParams = {
 
 type profileParams = {
   id: string;
-  photo: string;
+  photo?: string;
+  username?: string;
 };
 const authService = {
   getAllUsers: () => instance.get("/api/users"),

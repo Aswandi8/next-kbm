@@ -16,10 +16,11 @@ export async function GET(request: NextRequest) {
         });
         const path = request.nextUrl.pathname;
         revalidatePath(path);
+        console.log(profile);
         const newProfile = JSON.parse(JSON.stringify(profile));
         return NextResponse.json({
           success: true,
-          data: newProfile,
+          data: profile,
         });
       } else {
         return NextResponse.json({

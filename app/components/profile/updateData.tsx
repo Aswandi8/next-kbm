@@ -8,7 +8,8 @@ import { useState } from "react";
 import MyParagraph from "../ui/paragraph";
 import { useSession } from "next-auth/react";
 
-const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
+const UpdateData = ({ dataProfile }: any) => {
+  console.log(dataProfile);
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [contoh, setContoh] = useState("");
@@ -17,8 +18,6 @@ const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
       .string()
       .required("username is required")
       .min(4, "username must be at least 3 characters"),
-    email: yup.string(),
-    role: yup.string(),
   });
   const {
     register,
@@ -40,10 +39,10 @@ const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
             <MyParagraph>Username</MyParagraph>
             <Input
               {...register("username")}
-              id="name"
-              name="name"
+              id="username"
+              name="username"
               type="text"
-              placeholder={dataProfile.data?.username}
+              defaultValue={dataProfile.username}
             />
             {errors.username?.message && (
               <MyParagraph>
@@ -53,30 +52,28 @@ const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
               </MyParagraph>
             )}
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <MyParagraph>Username</MyParagraph>
               <Input
-                {...register("email")}
                 id="email"
                 name="email"
                 type="text"
-                defaultValue={dataProfile.data?.email}
+                defaultValue=""
                 readOnly
               />
             </div>
             <div>
               <MyParagraph>Role</MyParagraph>
               <Input
-                {...register("role")}
                 id="role"
                 name="role"
                 type="text"
-                defaultValue={dataProfile.data?.role}
+                defaultValue=""
                 readOnly
               />
             </div>
-          </div>
+          </div> */}
           <div className="grid sm:grid-cols-4 gap-4">
             <MyButton
               text={loading ? "Loading..." : "Update Data"}

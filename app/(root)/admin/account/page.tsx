@@ -28,7 +28,7 @@ const AccountAdmin = () => {
           const { data } = await authService.getProfile(
             session.data?.user.access_token
           );
-          setProfile(data);
+          setProfile(data.data);
         } catch (error) {
           console.error("Error fetching data wandi:", error);
         }
@@ -36,7 +36,7 @@ const AccountAdmin = () => {
       fetchData();
     }
   }, [profile, session]);
-
+  console.log(profile);
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -47,29 +47,7 @@ const AccountAdmin = () => {
           link1="/admin/home"
           active="Account"
         />
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 lg:gap-4 ">
-          <MyProfile dataProfile={profile} />
-          <div className="sm:col-span-3">
-            <MyCard>
-              <MySpan className="flex items-center gap-2">
-                <FaRegUser />
-                <MyHeading title="Update Data" />
-              </MySpan>
-              <MySeparator label="horizontal" />
-              <UpdateData dataProfile={profile} />
-            </MyCard>
-          </div>
-        </div>
-        <div>
-          <MyCard>
-            <MySpan className="flex items-center gap-2">
-              <GoKey />
-              <MyHeading title="Change Password" />
-            </MySpan>
-            <MySeparator label="horizontal" />
-            <UpdatePassword dataProfile={profile} />
-          </MyCard>
-        </div>
+        <MyProfile dataProfile={profile} />
       </div>
     </>
   );
