@@ -80,13 +80,17 @@ const MyProfile = ({ dataProfile }: any) => {
     setLoading(true);
     let uploadedImageUrl = values.imageUrl;
 
-    if (files.length > 0) {
+    if (files.length === 1) {
       const uploadedImages = await startUpload(files);
 
       if (!uploadedImages) {
         return;
       }
       uploadedImageUrl = uploadedImages[0].url;
+    } else {
+      toast.error("Max upload 1 image");
+      setLoading(false);
+      return;
     }
     const newData = {
       id: dataProfile?.id,

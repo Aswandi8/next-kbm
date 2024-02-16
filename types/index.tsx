@@ -7,3 +7,14 @@ export type usersParams = {
   photo: string;
   type: string;
 };
+
+export type kostParams = {
+  kost: string;
+  category: string;
+  room: string;
+  description: string;
+  location: string;
+  imageUrl: string[];
+  price: string;
+  url: string;
+};

@@ -73,7 +73,7 @@ const NavbarAdmin = () => {
                         : "/assets/images/avatar.svg"
                     }
                     alt="avatar"
-                    className="rounded-full w-8 h-8"
+                    className="rounded-full w-8 h-8 object-cover"
                   />
                   <MyHeading
                     title={

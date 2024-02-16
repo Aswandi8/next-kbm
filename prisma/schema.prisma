@@ -43,3 +43,23 @@ model dataType{
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now())
 }
+
+
+
+
+
+
+// DB Faisal
+model dataKost{
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  kost          String
+  category      String
+  room          String
+  description   String?
+  location      String?
+  imageUrl      String[]
+  price         String
+  url           String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+}

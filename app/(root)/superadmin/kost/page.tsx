@@ -1,92 +1,49 @@
-"use client";
-import * as React from "react";
-import { useState } from "react";
-import { FileUploader } from "@/app/components/ui/FileUploader";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useUploadThing } from "@/lib/uploadthing/uploadthing";
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  imageUrl: z.string(),
-});
+import { DataTable } from "@/app/components/data-tabel/data-table";
+import MyCard from "@/app/components/ui/card";
+import kostService from "@/lib/service/kostService";
+import { columns } from "./columns";
+import ComponentSeparator from "@/app/components/ui/componentSeparator";
+import MyHeading from "@/app/components/ui/heading";
+import MySpan from "@/app/components/ui/span";
+import Link from "next/link";
+import { FaPlus } from "react-icons/fa";
+import MySeparator from "@/app/components/ui/separator";
 
-const KostSuperAdmin = () => {
-  const [files, setFiles] = useState<File[]>([]);
-  const { startUpload } = useUploadThing("imageUploader");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    let uploadedImageUrl = values.imageUrl;
-
-    if (files.length > 0) {
-      const uploadedImages = await startUpload(files);
-
-      if (!uploadedImages) {
-        return;
-      }
-
-      uploadedImageUrl = uploadedImages[0].url;
-    }
-    console.log(uploadedImageUrl);
+async function getAllDataKost() {
+  const res = await kostService.getAllKost();
+  if (!res.data) {
+    return null;
   }
+  return res.data.Data;
+}
+const KostSuperAdmin = async () => {
+  const dataKost = await getAllDataKost();
   return (
     <>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-5"
-        >
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="imageUrl"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl className="h-72">
-                  <FileUploader
-                    onFieldChange={field.onChange}
-                    imageUrl={field.value}
-                    setFiles={setFiles}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+      <div className="flex gap-4 flex-col">
+        <ComponentSeparator
+          title="Data Kost"
+          nav1="Dashboard"
+          link1="/superadmin/home"
+          active="Data Kost"
+        />
+        <MyCard>
+          <div className="flex justify-between">
+            <MyHeading title="Data Kost" />
+            <MySpan>
+              <Link
+                href="/superadmin/kost/add-kost"
+                className="flex items-center gap-2"
+              >
+                <FaPlus />
+                Add data
+              </Link>
+            </MySpan>
+          </div>
+          <MySeparator label="horizontal" />
+          <DataTable columns={columns} data={dataKost} />
+        </MyCard>
+      </div>
     </>
   );
 };
