@@ -33,12 +33,29 @@ const formSchema = z.object({
 const formSchemaProfile = z.object({
   username: z.string(),
 });
+const formSchemaPassword = z
+  .object({
+    oldPassword: z.string().min(4, {
+      message: "Password must be at least 4 characters.",
+    }),
+    newPassword: z.string().min(4, {
+      message: "Password must be at least 4 characters.",
+    }),
+    confirmPassword: z.string().min(4, {
+      message: "Password must be at least 4 characters.",
+    }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
 
 const MyProfile = ({ dataProfile }: any) => {
   const { data: session, update } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
+  const [loadingPassword, setLoadingPassword] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const createdAt = dataProfile?.createdAt;
   const formattedCreatedAt = createdAt
@@ -54,6 +71,9 @@ const MyProfile = ({ dataProfile }: any) => {
     defaultValues: {
       username: dataProfile.username || session?.user?.username,
     },
+  });
+  const formPassword = useForm<z.infer<typeof formSchemaPassword>>({
+    resolver: zodResolver(formSchemaPassword),
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -131,6 +151,34 @@ const MyProfile = ({ dataProfile }: any) => {
         }
       });
   }
+
+  async function onSubmitPassword(value: z.infer<typeof formSchemaPassword>) {
+    setLoadingPassword(true);
+    const newData = {
+      id: dataProfile.id,
+      oldPassword: value.oldPassword,
+      newPassword: value.newPassword,
+    };
+    await authService
+      .updateImageProfile(newData)
+      .then((response: AxiosResponse) => {
+        // Handle response
+        toast.success("Profile Update Successfully");
+        formPassword.reset();
+        setLoadingPassword(false);
+        router.refresh();
+      })
+      .catch((reason: AxiosError<{ additionalInfo: string }>) => {
+        if (reason.response?.status === 404) {
+          // Handle 400
+          setLoadingPassword(false);
+          toast.error("Profile does not exist in the Database");
+        } else {
+          setLoadingPassword(false);
+          toast.error("Oops Something Went wrong");
+        }
+      });
+  }
   return (
     <>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 lg:gap-4 ">
@@ -203,7 +251,7 @@ const MyProfile = ({ dataProfile }: any) => {
 
                 <div>
                   <MyButton
-                    text={loadingData ? "Loading..." : "Update Profile"}
+                    text={loadingData ? "Loading..." : "Update Data"}
                     type="submit"
                     disabled={loadingData ? true : false}
                   />
@@ -220,7 +268,59 @@ const MyProfile = ({ dataProfile }: any) => {
             <MyHeading title="Change Password" />
           </MySpan>
           <MySeparator label="horizontal" />
-          {/* <UpdatePassword dataProfile={profile} /> */}
+          <Form {...formPassword}>
+            <form
+              onSubmit={formPassword.handleSubmit(onSubmitPassword)}
+              className="flex flex-col gap-5 mt-4"
+            >
+              <FormField
+                control={formPassword.control}
+                name="oldPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <MyParagraph>Old Password</MyParagraph>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formPassword.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <MyParagraph>New Password</MyParagraph>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formPassword.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <MyParagraph>Repeat Password</MyParagraph>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div>
+                <MyButton
+                  text={loadingPassword ? "Loading..." : "Update Password"}
+                  type="submit"
+                  disabled={loadingPassword ? true : false}
+                />
+              </div>
+            </form>
+          </Form>
         </MyCard>
       </div>
     </>

@@ -14,6 +14,8 @@ type profileParams = {
   id: string;
   photo?: string;
   username?: string;
+  oldPassword?: string;
+  newPassword?: string;
 };
 const authService = {
   getAllUsers: () => instance.get("/api/users"),
