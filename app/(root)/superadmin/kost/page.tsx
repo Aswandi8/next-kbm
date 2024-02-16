@@ -8,9 +8,10 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import MySeparator from "@/app/components/ui/separator";
 import { DataTable } from "./tabelKost";
+import instance from "@/lib/axios/instance";
 
 async function getAllDataKost() {
-  const res = await kostService.getAllKost();
+  const res = await instance.get("/api/superadmin/kost");
   return res.data.Data;
 }
 const KostSuperAdmin = async () => {
