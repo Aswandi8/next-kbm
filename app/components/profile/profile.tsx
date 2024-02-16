@@ -57,9 +57,9 @@ const MyProfile = ({ dataProfile }: any) => {
   const formProfile = useForm<z.infer<typeof formSchemaProfile>>({
     resolver: zodResolver(formSchemaProfile),
     defaultValues: {
-      username: dataProfile?.username || "username",
-      email: dataProfile?.email || "email",
-      role: dataProfile?.role || "role",
+      username: dataProfile.username,
+      email: dataProfile.email,
+      role: dataProfile.role,
     },
   });
 
