@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
     const getData = JSON.parse(JSON.stringify(data));
     const path = request.nextUrl.pathname;
     revalidatePath(path);
+    revalidatePath("/", "layout");
     return NextResponse.json(
       {
         message: "Success",
@@ -58,8 +59,6 @@ export async function POST(request: NextRequest) {
     const kriterias = await prisma.dataKost.create({
       data: body,
     });
-    const path = request.nextUrl.pathname;
-    revalidatePath(path);
     return NextResponse.json(
       {
         message: "Data created successfully",
