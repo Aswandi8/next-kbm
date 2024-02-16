@@ -1,4 +1,3 @@
-import { DataTable } from "@/app/components/data-tabel/data-table";
 import MyCard from "@/app/components/ui/card";
 import kostService from "@/lib/service/kostService";
 import { columns } from "./columns";
@@ -8,6 +7,7 @@ import MySpan from "@/app/components/ui/span";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import MySeparator from "@/app/components/ui/separator";
+import { DataTable } from "./tabelKost";
 
 async function getAllDataKost() {
   const res = await kostService.getAllKost();
