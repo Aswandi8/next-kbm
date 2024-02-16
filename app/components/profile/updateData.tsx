@@ -40,7 +40,7 @@ const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
               id="name"
               name="name"
               type="text"
-              defaultValue={dataProfile.data?.username}
+              defaultValue={dataProfile.data.username}
             />
             {errors.username?.message && (
               <MyParagraph>
