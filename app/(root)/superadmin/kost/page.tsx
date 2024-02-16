@@ -8,7 +8,6 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import MySeparator from "@/app/components/ui/separator";
 import { DataTable } from "./tabelKost";
-import authService from "@/lib/service/authService";
 
 async function getAllDataKost() {
   const res = await kostService.getAllKost();

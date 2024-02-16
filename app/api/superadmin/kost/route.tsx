@@ -9,13 +9,13 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
     const data = await prisma.dataKost.findMany();
-    const dataUsers = JSON.parse(JSON.stringify(data));
+    const getData = JSON.parse(JSON.stringify(data));
     const path = request.nextUrl.pathname;
     revalidatePath(path);
     return NextResponse.json(
       {
         message: "Success",
-        Data: dataUsers,
+        Data: getData,
       },
       {
         status: 200,
@@ -58,7 +58,8 @@ export async function POST(request: NextRequest) {
     const kriterias = await prisma.dataKost.create({
       data: body,
     });
-
+    const path = request.nextUrl.pathname;
+    revalidatePath(path);
     return NextResponse.json(
       {
         message: "Data created successfully",
