@@ -19,7 +19,6 @@ async function getAllDataKost() {
 }
 const KostSuperAdmin = async () => {
   const dataKost = await getAllDataKost();
-  console.log(dataKost);
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -43,7 +42,7 @@ const KostSuperAdmin = async () => {
             </MySpan>
           </div>
           <MySeparator label="horizontal" />
-          <DataTable columns={columns} data={dataKost} />
+          {/* <DataTable columns={columns} data={dataKost} /> */}
         </MyCard>
       </div>
     </>
