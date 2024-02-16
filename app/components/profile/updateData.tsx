@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+  const [contoh, setContoh] = useState("");
   const formSchema = yup.object().shape({
     username: yup
       .string()
@@ -26,11 +27,13 @@ const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(formSchema) });
   async function onSubmit(data: any) {
+    setContoh(data);
     console.log(data);
   }
 
   return (
     <div className="my-4">
+      {contoh}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-4">
           <div className="div">
