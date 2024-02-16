@@ -56,7 +56,7 @@ const AccountAdmin = () => {
                 <MyHeading title="Update Data" />
               </MySpan>
               <MySeparator label="horizontal" />
-              {/* <UpdateData dataProfile={profile} /> */}
+              <UpdateData dataProfile={profile} />
             </MyCard>
           </div>
         </div>
