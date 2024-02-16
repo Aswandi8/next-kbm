@@ -8,14 +8,14 @@ import { kostParams } from "@/types";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
-    const data = await prisma.dataKost.findMany();
-    const dataKost1 = JSON.parse(JSON.stringify(data));
+    const data = await prisma.user.findMany();
+    const dataKost = JSON.parse(JSON.stringify(data));
     const path = request.nextUrl.pathname;
     revalidatePath(path);
     return NextResponse.json(
       {
         message: "Success",
-        Data: dataKost1,
+        Data: dataKost,
       },
       {
         status: 200,
