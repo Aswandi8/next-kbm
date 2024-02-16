@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const data = await prisma.dataKost.findMany();
     const getData = JSON.parse(JSON.stringify(data));
-    const path = request.nextUrl.searchParams.get("path");
     revalidatePath("/", "layout");
     return NextResponse.json(
       {
@@ -53,7 +52,7 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-
+    revalidatePath("/", "layout");
     // Create a new entry in the "dataKost" table using Prisma
     const kriterias = await prisma.dataKost.create({
       data: body,
