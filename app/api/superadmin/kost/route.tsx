@@ -9,13 +9,13 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
     const data = await prisma.dataKost.findMany();
-    const dataKost = JSON.parse(JSON.stringify(data));
-    // const path = request.nextUrl.pathname;
-    // revalidatePath(path);
+    const dataUsers = JSON.parse(JSON.stringify(data));
+    const path = request.nextUrl.pathname;
+    revalidatePath(path);
     return NextResponse.json(
       {
         message: "Success",
-        Data: dataKost,
+        Data: dataUsers,
       },
       {
         status: 200,

@@ -11,7 +11,7 @@ import { DataTable } from "./tabelKost";
 import authService from "@/lib/service/authService";
 
 async function getAllDataUsers() {
-  const res = await authService.getAllUsers();
+  const res = await kostService.getAllKost();
   if (!res.data) {
     return null;
   }
