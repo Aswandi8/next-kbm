@@ -59,11 +59,13 @@ const AddKost = () => {
   });
   const { startUpload } = useUploadThing("imageUploader");
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const uploadedImageUrl: string[] = [];
     if (files.length > 0) {
       const uploadedImages = await startUpload(files);
 
       if (!uploadedImages) {
+        setLoading(false);
         return;
       }
       uploadedImages.forEach((image) => {
