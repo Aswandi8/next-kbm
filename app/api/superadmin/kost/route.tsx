@@ -8,9 +8,13 @@ import { kostParams } from "@/types";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
+    const path = request.nextUrl.searchParams.get("path");
+    if (path !== null) {
+      revalidatePath(path);
+    }
+    revalidatePath("/", "layout");
     const data = await prisma.dataKost.findMany();
     const getData = JSON.parse(JSON.stringify(data));
-    revalidatePath("/", "layout");
     return NextResponse.json(
       {
         message: "Success",
