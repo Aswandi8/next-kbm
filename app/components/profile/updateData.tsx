@@ -58,7 +58,7 @@ const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
                 id="email"
                 name="email"
                 type="text"
-                defaultValue={dataProfile.data?.email}
+                defaultValue={dataProfile.data.email}
                 readOnly
               />
             </div>
@@ -69,7 +69,7 @@ const UpdateData = ({ dataProfile }: { dataProfile: any }) => {
                 id="role"
                 name="role"
                 type="text"
-                defaultValue={dataProfile.data?.role}
+                defaultValue={dataProfile.data.role}
                 readOnly
               />
             </div>
