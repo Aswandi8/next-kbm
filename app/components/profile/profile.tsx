@@ -34,8 +34,6 @@ const formSchema = z.object({
 });
 const formSchemaProfile = z.object({
   username: z.string(),
-  email: z.string(),
-  role: z.string(),
 });
 
 const MyProfile = ({ dataProfile }: any) => {
@@ -57,9 +55,7 @@ const MyProfile = ({ dataProfile }: any) => {
   const formProfile = useForm<z.infer<typeof formSchemaProfile>>({
     resolver: zodResolver(formSchemaProfile),
     defaultValues: {
-      username: dataProfile.username,
-      email: dataProfile.email,
-      role: dataProfile.role,
+      username: dataProfile?.username || dataProfile.username,
     },
   });
 
@@ -198,32 +194,14 @@ const MyProfile = ({ dataProfile }: any) => {
                   )}
                 />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <FormField
-                    control={formProfile.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <MyParagraph>Email</MyParagraph>
-                        <FormControl>
-                          <Input placeholder="shadcn" {...field} readOnly />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={formProfile.control}
-                    name="role"
-                    render={({ field }) => (
-                      <FormItem>
-                        <MyParagraph>Role</MyParagraph>
-                        <FormControl>
-                          <Input placeholder="shadcn" {...field} readOnly />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div>
+                    <MyParagraph>Email</MyParagraph>
+                    <Input placeholder={dataProfile.email} readOnly />
+                  </div>
+                  <div>
+                    <MyParagraph>Role</MyParagraph>
+                    <Input placeholder={dataProfile.role} readOnly />
+                  </div>
                 </div>
 
                 <div>
