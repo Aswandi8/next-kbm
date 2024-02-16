@@ -10,7 +10,7 @@ import MySeparator from "@/app/components/ui/separator";
 import { DataTable } from "./tabelKost";
 import authService from "@/lib/service/authService";
 
-async function getAllDataUsers() {
+async function getAllDataKost() {
   const res = await kostService.getAllKost();
   if (!res.data) {
     return null;
@@ -18,7 +18,7 @@ async function getAllDataUsers() {
   return res.data.Data;
 }
 const KostSuperAdmin = async () => {
-  // const data = await getAllDataKost();
+  const data = await getAllDataKost();
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -42,7 +42,7 @@ const KostSuperAdmin = async () => {
             </MySpan>
           </div>
           <MySeparator label="horizontal" />
-          {/* <DataTable columns={columns} data={data} /> */}
+          <DataTable columns={columns} data={data} />
         </MyCard>
       </div>
     </>
