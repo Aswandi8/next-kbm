@@ -84,7 +84,7 @@ const AddKost = () => {
       .addKost(newData)
       .then((response: AxiosResponse) => {
         // Handle response
-        toast.success("Kriteria Created Successfully", response.data.message);
+        toast.success("Data kost created successfully", response.data.message);
         setLoading(false);
         form.reset();
         router.replace("/superadmin/kost");

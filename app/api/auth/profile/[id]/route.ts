@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
-import type { User } from "@prisma/client";
 import { utapi } from "@/lib/uploadthing/instance";
 import { revalidatePath } from "next/cache";
 export const dynamic = "force-dynamic";
@@ -28,7 +27,6 @@ export async function PATCH(
       );
     }
     const body = await request.json();
-    console.log(body);
 
     const oldPassword = profileExists.password;
     const oldImage = profileExists.photo;
@@ -42,14 +40,12 @@ export async function PATCH(
         body.oldPassword,
         profileExists.password
       );
-      console.log(isValidPassword);
       if (!isValidPassword) {
         return NextResponse.json({
           message: "Invalid Password",
         });
       }
       const newPassword = await bcrypt.hash(body.newPassword, 10);
-      console.log(newPassword);
       const profile = await prisma.user.update({
         where: {
           id: params.id,
@@ -63,7 +59,6 @@ export async function PATCH(
         message: "Password Updated Successfully",
       });
     }
-    console.log(profileExists);
 
     const profile = await prisma.user.update({
       where: {

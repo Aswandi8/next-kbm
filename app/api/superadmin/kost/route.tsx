@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const path = request.nextUrl.pathname;
     revalidatePath(path);
-    revalidatePath("/", "layout");
     const data = await prisma.dataKost.findMany();
     const getData = JSON.parse(JSON.stringify(data));
     return NextResponse.json(
@@ -59,7 +58,6 @@ export async function POST(request: NextRequest) {
     });
     const path = request.nextUrl.pathname;
     revalidatePath(path);
-    revalidatePath("/", "layout");
     return NextResponse.json(
       {
         message: "Data created successfully",

@@ -2,6 +2,7 @@
 import { kostParams } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/app/components/data-tabel/DataTableColumnHeader";
+import DeleteKost from "./add-kost/deleteKost";
 // import UpdateUsers from "./updateUsers";
 // import UpdateKriteria from "./updateKriteria";
 // import DeleteKriteria from "./daleteKriteria";
@@ -50,13 +51,11 @@ export const columns: ColumnDef<kostParams>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const dataUsers = row.original;
+      const dataKost = row.original;
 
       return (
         <div className="flex items-center gap-2">
-          {/* <UpdateUsers dataUsers={dataUsers} /> */}
-          {/* <UpdateKriteria kriteria={kriteria} />
-          <DeleteKriteria kriteria={kriteria} /> */}
+          <DeleteKost deleteKost={dataKost} />
         </div>
       );
     },
