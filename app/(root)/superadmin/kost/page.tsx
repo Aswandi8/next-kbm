@@ -8,14 +8,13 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import MySeparator from "@/app/components/ui/separator";
 import { DataTable } from "./tabelKost";
-import instance from "@/lib/axios/instance";
 
-async function getAllDataKost() {
-  const res = await instance.get("/api/superadmin/kost");
-  return res.data.Data;
-}
+// async function getAllDataKost() {
+//   const res = await kostService.getAllKost();
+//   return res.data.Data;
+// }
 const KostSuperAdmin = async () => {
-  const data = await getAllDataKost();
+  // const data = await getAllDataKost();
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -39,7 +38,7 @@ const KostSuperAdmin = async () => {
             </MySpan>
           </div>
           <MySeparator label="horizontal" />
-          <DataTable columns={columns} data={data} />
+          {/* <DataTable columns={columns} data={data} /> */}
         </MyCard>
       </div>
     </>
