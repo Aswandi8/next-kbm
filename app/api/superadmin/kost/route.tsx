@@ -5,36 +5,36 @@ export const dynamic = "force-dynamic";
 import { revalidatePath } from "next/cache";
 import { kostParams } from "@/types";
 
-// export async function GET(request: NextRequest) {
-//   try {
-//     await connectToDatabase();
-//     const data = await prisma.dataKost.findMany();
-//     const dataKost = JSON.parse(JSON.stringify(data));
-//     const path = request.nextUrl.pathname;
-//     revalidatePath(path);
-//     return NextResponse.json(
-//       {
-//         message: "Success",
-//         Data: dataKost,
-//       },
-//       {
-//         status: 200,
-//       }
-//     );
-//   } catch (error) {
-//     return NextResponse.json(
-//       {
-//         message: "Internal Server Error",
-//         error: error,
-//       },
-//       {
-//         status: 500,
-//       }
-//     );
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-// }
+export async function GET(request: NextRequest) {
+  try {
+    await connectToDatabase();
+    const data = await prisma.dataKost.findMany();
+    const dataKost1 = JSON.parse(JSON.stringify(data));
+    const path = request.nextUrl.pathname;
+    revalidatePath(path);
+    return NextResponse.json(
+      {
+        message: "Success",
+        Data: dataKost1,
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: "Internal Server Error",
+        error: error,
+      },
+      {
+        status: 500,
+      }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {

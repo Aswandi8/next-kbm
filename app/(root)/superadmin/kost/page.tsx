@@ -9,15 +9,17 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import MySeparator from "@/app/components/ui/separator";
 
-// async function getAllDataKost() {
-//   const res = await kostService.getAllKost();
-//   if (!res.data) {
-//     return null;
-//   }
-//   return res.data.Data;
-// }
+async function getAllDataKost() {
+  const res = await kostService.getAllKost();
+  // console.log(res.data);
+  if (!res.data) {
+    return null;
+  }
+  return res.data.Data;
+}
 const KostSuperAdmin = async () => {
-  // const dataKost = await getAllDataKost();
+  const dataKost = await getAllDataKost();
+  console.log(dataKost);
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -41,7 +43,7 @@ const KostSuperAdmin = async () => {
             </MySpan>
           </div>
           <MySeparator label="horizontal" />
-          {/* <DataTable columns={columns} data={dataKost} /> */}
+          <DataTable columns={columns} data={dataKost} />
         </MyCard>
       </div>
     </>
