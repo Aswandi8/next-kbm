@@ -37,7 +37,6 @@ const formSchemaProfile = z.object({
 });
 
 const MyProfile = ({ dataProfile }: any) => {
-  console.log(dataProfile);
   const { data: session, update } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -55,7 +54,7 @@ const MyProfile = ({ dataProfile }: any) => {
   const formProfile = useForm<z.infer<typeof formSchemaProfile>>({
     resolver: zodResolver(formSchemaProfile),
     defaultValues: {
-      username: dataProfile?.username || dataProfile.username,
+      username: dataProfile.username || session?.user?.username,
     },
   });
 
