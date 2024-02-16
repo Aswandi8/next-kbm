@@ -3,15 +3,15 @@ import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
 export const dynamic = "force-dynamic";
 import { revalidatePath } from "next/cache";
-import { error } from "console";
 import { kostParams } from "@/types";
+
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
     const data = await prisma.dataKost.findMany();
     const dataKost = JSON.parse(JSON.stringify(data));
-    const path = request.nextUrl.pathname;
-    revalidatePath(path);
+    // const path = request.nextUrl.pathname;
+    // revalidatePath(path);
     return NextResponse.json(
       {
         message: "Success",
@@ -54,8 +54,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(body);
-
     // Create a new entry in the "dataKost" table using Prisma
     const kriterias = await prisma.dataKost.create({
       data: body,
@@ -71,8 +69,6 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error("Error:", error);
-
     return NextResponse.json(
       {
         message: "Internal Server Error",
