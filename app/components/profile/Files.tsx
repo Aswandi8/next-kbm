@@ -1,34 +1,30 @@
 "use client";
 import { useCallback, Dispatch, SetStateAction } from "react";
-import { MdCloudUpload } from "react-icons/md";
 type FileUploaderProps = {
   onFieldChange: (url: string) => void;
   imageUrl: string;
   setFiles: Dispatch<SetStateAction<File[]>>;
-  myImage: string;
 };
-
 import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
-import { useUploadThing } from "@/lib/uploadthing/uploadthing";
-import { Button } from "@/components/ui/button";
 import { convertFileToUrl } from "@/lib/utils";
 import MyImage from "@/app/components/ui/image";
 import MyHeading from "@/app/components/ui/heading";
 import MyLabel from "@/app/components/ui/label";
-import MyButton from "@/app/components/ui/button";
-
+import { useSession } from "next-auth/react";
 export function FileUploader({
   imageUrl,
   onFieldChange,
   setFiles,
-  myImage,
 }: FileUploaderProps) {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
-    onFieldChange(convertFileToUrl(acceptedFiles[0]));
-  }, []);
-
+  const { data: session } = useSession();
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setFiles(acceptedFiles);
+      onFieldChange(convertFileToUrl(acceptedFiles[0]));
+    },
+    [onFieldChange, setFiles]
+  );
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: "image/*" ? generateClientDropzoneAccept(["image/*"]) : undefined,
@@ -51,12 +47,12 @@ export function FileUploader({
         ) : (
           <>
             <MyImage
-              src={myImage ?? "/assets/images/avatar.svg"}
+              src={session?.user?.photo ?? "/assets/images/avatar.svg"}
               alt="profile"
               className="w-28 h-28 rounded-full mb-4 object-cover"
             />
             <MyHeading title="Drag photo here" />
-            <MyLabel title="SVG, PNG, JPG" className="mb-4" />
+            <MyLabel title="SVG, PNG, JPG" className="" />
           </>
         )}
       </div>

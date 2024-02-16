@@ -7,6 +7,7 @@ type buttonParams = {
   text: string;
   customFunc?: () => void;
   className?: string;
+  disabled?: boolean;
 };
 
 const MyButton = ({
@@ -14,11 +15,13 @@ const MyButton = ({
   text,
   customFunc,
   className,
+  disabled,
 }: buttonParams) => {
   const { currentColor, currentColorText } = useStateContext();
   return (
     <>
       <Button
+        disabled={disabled}
         type={type}
         onClick={customFunc}
         style={{ background: currentColor, color: currentColorText }}

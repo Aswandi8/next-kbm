@@ -1,44 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
-import jwt, { JwtPayload } from "jsonwebtoken";
-export const dynamic = "force-dynamic";
+import jwt from "jsonwebtoken";
 import { revalidatePath } from "next/cache";
+export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
-    const token = request.headers.get("Authorization")?.split(" ")[1] || "";
-    if (!token) {
-      return NextResponse.json(
-        {
-          message: "Unauthorized - Token not provided",
-        },
-        {
-          status: 401,
-        }
-      );
-    }
-
-    const decoded = jwt.verify(
-      token,
-      process.env.NEXTAUTH_SECRET || ""
-    ) as JwtPayload;
-
-    // Perform any additional checks on the decoded token if needed
-
-    await connectToDatabase();
-    const dataProfile = await prisma.user.findFirst({
-      where: { id: decoded.id },
-    });
-    const path = request.nextUrl.pathname;
-    revalidatePath(path);
-    return NextResponse.json(
-      {
-        data: dataProfile,
-      },
-      {
-        status: 200,
+    const token = request.headers.get("Authorization") || "";
+    if (token) {
+      var decoded: any = jwt.verify(token, process.env.NEXTAUTH_SECRET || "");
+      if (decoded) {
+        const profile = await prisma.user.findUnique({
+          where: {
+            id: decoded.id,
+          },
+        });
+        const path = request.nextUrl.pathname;
+        revalidatePath(path);
+        const newProfile = JSON.parse(JSON.stringify(profile));
+        return NextResponse.json({
+          success: true,
+          data: newProfile,
+        });
+      } else {
+        return NextResponse.json({
+          success: false,
+          data: "goblok",
+        });
       }
-    );
+    } else {
+      return NextResponse.json({
+        message: "Unauthorized Tena tokennu",
+      });
+    }
   } catch (error: any) {
     // Handle specific errors if needed
     if (error.name === "TokenExpiredError") {

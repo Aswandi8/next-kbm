@@ -4,15 +4,17 @@ import { Separator } from "@/components/ui/separator";
 
 const MySeparator = ({
   label,
+  className,
 }: {
   label: "horizontal" | "vertical" | undefined;
+  className?: string;
 }) => {
   const { currentColor } = useStateContext();
   return (
     <>
       <Separator
         orientation={label}
-        className="my-2"
+        className={`${className} my-2 `}
         style={
           label === "vertical"
             ? {

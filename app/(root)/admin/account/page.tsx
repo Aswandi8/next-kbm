@@ -12,24 +12,25 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { GoKey } from "react-icons/go";
-import MyProfile from "./profile";
+import MyProfile from "../../../components/profile/profile";
+import UpdateData from "@/app/components/profile/updateData";
+import UpdatePassword from "@/app/components/profile/updatePassword";
+import axios from "axios";
 const AccountAdmin = () => {
-  const { data: session } = useSession();
+  const session: any = useSession();
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
-
+  // console.log(session);
   useEffect(() => {
-    if (session?.user.access_token && Object.keys(profile).length === 0) {
+    if (session.data?.user.access_token && Object.keys(profile).length === 0) {
       const fetchData = async () => {
         try {
           const { data } = await authService.getProfile(
-            session?.user.access_token || ""
+            session.data?.user.access_token
           );
           setProfile(data);
         } catch (error) {
-          console.error("An error occurred while fetching the data: ", error);
-        } finally {
-          setLoading(false);
+          console.error("Error fetching data wandi:", error);
         }
       };
       fetchData();
@@ -40,50 +41,34 @@ const AccountAdmin = () => {
     <>
       <div className="flex gap-4 flex-col">
         <ComponentSeparator
-          title="Data Sparepart"
-          subTitle="Sparepart adalah"
+          title="Account"
+          subTitle="My Profile"
           nav1="Dashboard"
-          link1="/logistic/home"
-          active="Data Sparepart"
+          link1="/admin/home"
+          active="Account"
         />
-
-        <div className="flex flex-col md:flex-row gap-4 no-wrap">
-          <div className="flex flex-col w-full md:w-3/12 gap-4">
-            <MyProfile dataProfile={profile} />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 lg:gap-4 ">
+          <MyProfile dataProfile={profile} />
+          <div className="sm:col-span-3">
             <MyCard>
-              <MyHeading title="Similar Profiles" />
-              <div className="grid grid-cols-3">
-                <div className="text-center my-2">
-                  <MyImage
-                    src={
-                      session?.user?.photo
-                        ? session?.user?.photo
-                        : "/assets/images/avatar.svg"
-                    }
-                    alt="profile"
-                    className="h-16 w-16 rounded-full mx-auto"
-                  />
-                  <MyLabel title="Wandi" className="text-sm" />
-                </div>
-              </div>
-            </MyCard>
-          </div>
-          <div className="flex flex-col w-full md:w-9/12 gap-4">
-            <MyCard>
-              <MySpan>
-                <MyHeading title="Update Data" />
+              <MySpan className="flex items-center gap-2">
                 <FaRegUser />
+                <MyHeading title="Update Data" />
               </MySpan>
-              <div className="mt-4">Form Update</div>
-            </MyCard>
-            <MyCard>
-              <MySpan>
-                <MyHeading title="Change Password" />
-                <GoKey />
-              </MySpan>
-              <div className="mt-4">Form Update</div>
+              <MySeparator label="horizontal" />
+              {/* <UpdateData dataProfile={profile} /> */}
             </MyCard>
           </div>
+        </div>
+        <div>
+          <MyCard>
+            <MySpan className="flex items-center gap-2">
+              <GoKey />
+              <MyHeading title="Change Password" />
+            </MySpan>
+            <MySeparator label="horizontal" />
+            <UpdatePassword dataProfile={profile} />
+          </MyCard>
         </div>
       </div>
     </>

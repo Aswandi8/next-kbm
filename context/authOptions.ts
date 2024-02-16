@@ -70,13 +70,24 @@ export const authOptions: NextAuthOptions = {
     updateAge: 24 * 60 * 60,
   },
   callbacks: {
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, account, profile, trigger, session }) {
       if (account?.provider === "credentials") {
         token.username = user.username;
         token.email = user.email;
         token.role = user.role;
         token.photo = user.photo;
         token.id = user.id;
+      }
+      if (trigger === "update" && session) {
+        if (typeof session.user.username === "string") {
+          token.username = session.user.username || "";
+        }
+        if (typeof session.user.photo === "string") {
+          token.photo = session.user.photo || "";
+        }
+        if (typeof session.user.access_token === "string") {
+          token.access_token = session.user.access_token || "";
+        }
       }
       return token;
     },

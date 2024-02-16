@@ -19,7 +19,7 @@ const authService = {
   getProfile: (token: string) =>
     instance.get("/api/auth/profile", {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
     }),
   updateImageProfile: (data: profileParams) =>
