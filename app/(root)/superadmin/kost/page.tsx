@@ -11,14 +11,10 @@ import { DataTable } from "./tabelKost";
 
 async function getAllDataKost() {
   const res = await kostService.getAllKost();
-  // console.log(res.data);
-  if (!res.data) {
-    return null;
-  }
   return res.data.Data;
 }
 const KostSuperAdmin = async () => {
-  const dataKost = await getAllDataKost();
+  const data = await getAllDataKost();
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -42,7 +38,7 @@ const KostSuperAdmin = async () => {
             </MySpan>
           </div>
           <MySeparator label="horizontal" />
-          {/* <DataTable columns={columns} data={dataKost} /> */}
+          <DataTable columns={columns} data={data} />
         </MyCard>
       </div>
     </>
