@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
-export const dynamic = "force-dynamic";
-import { revalidatePath } from "next/cache";
 import { kostParams } from "@/types";
+import { revalidatePath } from "next/cache";
 
+export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
-    const path = request.nextUrl.searchParams.get("path");
-    if (path !== null) {
-      revalidatePath(path);
-    }
+    const path = request.nextUrl.pathname;
+    revalidatePath(path);
     revalidatePath("/", "layout");
     const data = await prisma.dataKost.findMany();
     const getData = JSON.parse(JSON.stringify(data));
@@ -42,7 +40,6 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
-
     // Parse the JSON body from the request
     const body: kostParams = await request.json();
 
@@ -56,11 +53,13 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-    revalidatePath("/", "layout");
     // Create a new entry in the "dataKost" table using Prisma
     const kriterias = await prisma.dataKost.create({
       data: body,
     });
+    const path = request.nextUrl.pathname;
+    revalidatePath(path);
+    revalidatePath("/", "layout");
     return NextResponse.json(
       {
         message: "Data created successfully",

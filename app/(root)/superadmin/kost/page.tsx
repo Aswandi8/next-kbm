@@ -8,7 +8,7 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import MySeparator from "@/app/components/ui/separator";
 import { DataTable } from "./tabelKost";
-
+export const dynamic = "force-dynamic";
 async function getAllDataKost() {
   const res = await kostService.getAllKost();
   if (!res.data) {

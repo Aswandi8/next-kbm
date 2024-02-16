@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
-export const dynamic = "force-dynamic";
 import { revalidatePath } from "next/cache";
+export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
