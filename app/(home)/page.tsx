@@ -49,10 +49,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
           </div>
         </section>
 
-        <section
-          id="events"
-          className="container my-8 flex flex-col gap-8 md:gap-12"
-        >
+        <section id="events" className="my-8 flex flex-col gap-8 md:gap-12">
           <h2 className="text-xl lg:text-4xl  font-bold">
             Pilih dengan percaya <br /> Hiduplah dengan nyaman
           </h2>
@@ -60,7 +57,6 @@ export default async function Home({ searchParams }: SearchParamProps) {
             {/* <Search /> */}
             {/* <CategoryFilter /> */}
           </div>
-          {/* <Collection /> */}
           <Collection
             data={events?.data}
             emptyTitle="No Events Found"
