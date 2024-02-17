@@ -23,11 +23,18 @@ const SidebarSuperAdmin = () => {
         <>
           <div className="h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10 px-8 shadow-lg z-50 bg-gray-300 dark:bg-slate-800">
             <div className="flex justify-between items-center my-3 ">
-              <MyImage
-                src="/assets/images/logo.png"
-                alt="logo"
-                className="h-9 w-fit"
-              />
+              <Link
+                href={"/"}
+                target="_blank"
+                className="flex justify-center items-end gap-2"
+              >
+                <MyImage
+                  src="/assets/images/bg-10.svg"
+                  alt="logo"
+                  className="h-9 w-fit"
+                />
+                <span className="text-xl font-bold uppercase">SANTAI</span>
+              </Link>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
