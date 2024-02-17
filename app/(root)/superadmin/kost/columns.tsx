@@ -13,10 +13,11 @@ export const columns: ColumnDef<kostParams>[] = [
     ),
     cell: ({ row }) => {
       const value: string = row.getValue("imageUrl");
+      const leny = value.length - 1;
       const myImage = value[value.length - 1];
       return (
         <>
-          <div className="h-10 w-10">
+          <div className=" h-10 w-10">
             <MyImage
               alt="hero"
               src={myImage}

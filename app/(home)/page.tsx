@@ -1,11 +1,24 @@
-"use client";
+// "use client";
 
+import { getAllKost } from "@/lib/service/homeService";
+import Collection from "../components/home/collection";
 import MyButton from "../components/ui/button";
 import MyHeading from "../components/ui/heading";
 import MyImage from "../components/ui/image";
 import MyParagraph from "../components/ui/paragraph";
+type SearchParamProps = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+export default async function Home({ searchParams }: SearchParamProps) {
+  const page = Number(searchParams?.page) || 1;
+  const searchText = (searchParams?.query as string) || "";
 
-export default function Home() {
+  const events = await getAllKost({
+    query: searchText,
+    page,
+    limit: 6,
+  });
   return (
     <div className="container my-8">
       <div>
@@ -25,7 +38,7 @@ export default function Home() {
                 perjalanan pencarian kost impianmu bersama kami.
               </MyParagraph>
               <div>
-                <MyButton text="Explore Now" customFunc={() => {}} />
+                <MyButton text="Explore Now" />
               </div>
             </div>
             <MyImage
@@ -48,15 +61,15 @@ export default function Home() {
             {/* <CategoryFilter /> */}
           </div>
           {/* <Collection /> */}
-          {/* <Collection '@/components/shared/Collection
-          data={events?.data}
-          emptyTitle="No Events Found"
-          emptyStateSubtext="Come back later"
-          collectionType="All_Events"
-          limit={6}
-          page={page}
-          totalPages={events?.totalPages}
-        /> */}
+          <Collection
+            data={events?.data}
+            emptyTitle="No Events Found"
+            emptyStateSubtext="Come back later"
+            collectionType="All_Events"
+            limit={6}
+            page={page}
+            totalPages={events?.totalPages}
+          />
         </section>
       </div>
     </div>
