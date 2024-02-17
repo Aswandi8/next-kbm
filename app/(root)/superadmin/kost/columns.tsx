@@ -3,11 +3,30 @@ import { kostParams } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/app/components/data-tabel/DataTableColumnHeader";
 import DeleteKost from "./add-kost/deleteKost";
-// import UpdateUsers from "./updateUsers";
-// import UpdateKriteria from "./updateKriteria";
-// import DeleteKriteria from "./daleteKriteria";
+import MyImage from "@/app/components/ui/image";
 
 export const columns: ColumnDef<kostParams>[] = [
+  {
+    accessorKey: "imageUrl",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Image" />
+    ),
+    cell: ({ row }) => {
+      const value: string = row.getValue("imageUrl");
+      const myImage = value[value.length - 1];
+      return (
+        <>
+          <div className="h-10 w-10">
+            <MyImage
+              alt="hero"
+              src={myImage}
+              className="h-full w-full rounded-full object-cover object-center"
+            />
+          </div>
+        </>
+      );
+    },
+  },
   {
     accessorKey: "kost",
     header: ({ column }) => (
