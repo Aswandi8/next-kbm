@@ -44,7 +44,7 @@ const NavbarAdmin = () => {
         <div className="flex gap-4">
           <ButtonIcon
             title="Cart"
-            customFunc={() => signOut({ callbackUrl: "/auth/sign-in" })}
+            customFunc={() => handleClick("cart")}
             color={currentColor}
             dotColor=""
             icon={<MdOutlineShoppingCart />}
