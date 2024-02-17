@@ -24,10 +24,15 @@ export type kriteriaParams = {
   bobot: number;
 };
 
+export type addSubkriteriaParams = {
+  subkriteria: string;
+  bobot: number;
+  kriteriaId: string;
+};
 export type subkriteriaParams = {
   id: string;
   subkriteria: string;
-  bobot: string;
+  bobot: number;
   kriteriaId: string;
   kriterias: [
     {

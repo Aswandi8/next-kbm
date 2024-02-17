@@ -15,22 +15,22 @@ export async function DELETE(
     if (token) {
       var decoded: any = jwt.verify(token, process.env.NEXTAUTH_SECRET || "");
       if (decoded) {
-        const kriteria = await prisma.kriteria.findUnique({
+        const subkriteriaExisting = await prisma.subKriteria.findUnique({
           where: {
             id: params.id,
           },
         });
-        if (!kriteria) {
+        if (!subkriteriaExisting) {
           return NextResponse.json(
             {
-              message: "Data kriteria does not exist in the Database",
+              message: "Data subkriteria does not exist in the Database",
             },
             {
               status: 404,
             }
           );
         }
-        const deleteKriteria = await prisma.kriteria.delete({
+        const deleteSubkriteria = await prisma.subKriteria.delete({
           where: {
             id: params.id,
           },
@@ -39,7 +39,7 @@ export async function DELETE(
         revalidatePath(path);
         return NextResponse.json({
           success: true,
-          data: deleteKriteria,
+          data: deleteSubkriteria,
         });
       } else {
         return NextResponse.json({
