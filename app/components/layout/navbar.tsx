@@ -17,6 +17,10 @@ import {
 import MyImage from "../ui/image";
 import { signOut, useSession } from "next-auth/react";
 import MyHeading from "../ui/heading";
+import NotificationView from "./NotificationView";
+import UserProfileView from "./UserProfileView";
+import ChatView from "./ChatView";
+import CartView from "./CartView";
 const NavbarAdmin = () => {
   const session = useSession();
   const {
@@ -95,10 +99,10 @@ const NavbarAdmin = () => {
             </Tooltip>
           </TooltipProvider>
         </div>
-        {/* {isClicked.cart && <CartView />}
+        {isClicked.cart && <CartView />}
         {isClicked.chat && <ChatView />}
         {isClicked.notification && <NotificationView />}
-        {isClicked.userProfile && <UserProfileView />} */}
+        {isClicked.userProfile && <UserProfileView />}
       </div>
     </>
   );
