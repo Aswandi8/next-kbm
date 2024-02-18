@@ -1,8 +1,8 @@
 const Loading = () => {
   return (
-    <>
+    <div className="container my-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4 w-full">
-        <div className="relative p-4 w-full bg-white rounded-lg overflow-hidden shadow hover:shadow-md ">
+        <div className="relative p-4 w-full bg-gray-100   overflow-hidden shadow hover:shadow-md rounded-lg">
           <div className="animate-pulse flex flex-col">
             <div className="rounded w-full h-52 bg-gray-200"></div>
             <div className="flex flex-col mt-5">
@@ -30,7 +30,7 @@ const Loading = () => {
           </div>
         </div>
 
-        <div className="relative p-4 w-full bg-white  overflow-hidden shadow hover:shadow-md rounded-lg">
+        <div className="relative p-4 w-full bg-gray-100   overflow-hidden shadow hover:shadow-md rounded-lg">
           <div className="animate-pulse flex flex-col">
             <div className="rounded w-full h-52 bg-gray-200"></div>
             <div className="flex flex-col mt-5">
@@ -58,7 +58,7 @@ const Loading = () => {
           </div>
         </div>
 
-        <div className="relative p-4 w-full bg-white  overflow-hidden shadow hover:shadow-md rounded-lg">
+        <div className="relative p-4 w-full bg-gray-100   overflow-hidden shadow hover:shadow-md rounded-lg">
           <div className="animate-pulse flex flex-col">
             <div className="rounded w-full h-52 bg-gray-200"></div>
             <div className="flex flex-col mt-5">
@@ -86,7 +86,7 @@ const Loading = () => {
           </div>
         </div>
 
-        <div className="relative p-4 w-full bg-white  overflow-hidden shadow hover:shadow-md rounded-lg">
+        <div className="relative p-4 w-full bg-gray-100 verflow-hidden shadow hover:shadow-md rounded-lg">
           <div className="animate-pulse flex flex-col">
             <div className="rounded w-full h-52 bg-gray-200"></div>
             <div className="flex flex-col mt-5">
@@ -114,7 +114,7 @@ const Loading = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default Loading;

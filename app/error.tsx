@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import MyImage from "./components/ui/image";
+import MyButton from "./components/ui/button";
 
 export default function Error({
   error,
@@ -28,10 +29,10 @@ export default function Error({
             <p className="text-2xl md:text-3xl font-light leading-normal mb-8">
               Sorry we couldnt find the page youre looking for
             </p>
-            {/* <MyButton
+            <MyButton
               text="back to homepage"
               customFunc={() => router.push("/admin/home")}
-            /> */}
+            />
           </div>
           <div className="w-full lg:flex lg:justify-end lg:w-1/2 mx-5 my-12">
             <MyImage alt="404" src="/assets/images/error-4.svg" />

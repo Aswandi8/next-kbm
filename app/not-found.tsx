@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 // import MyButton from "./components/ui/MyButton";
 import Image from "next/image";
 import MyImage from "./components/ui/image";
+import MyButton from "./components/ui/button";
 
 export default function NotFound() {
   const router = useRouter();
@@ -21,10 +22,10 @@ export default function NotFound() {
             <p className="text-2xl md:text-3xl font-light leading-normal mb-8">
               Could not find requested resource
             </p>
-            {/* <MyButton
+            <MyButton
               text="back to homepage"
               customFunc={() => router.push("/admin/home")}
-            /> */}
+            />
           </div>
           <div className="w-full lg:flex lg:justify-end lg:w-1/2 mx-5 my-12">
             <MyImage alt="Not Found" src="/assets/images/error-2.svg" />

@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/app/(home)/loading";
 import MyCard from "@/app/components/ui/card";
 import ComponentSeparator from "@/app/components/ui/componentSeparator";
 import MyHeading from "@/app/components/ui/heading";
@@ -6,10 +7,30 @@ import MySeparator from "@/app/components/ui/separator";
 import kostService from "@/lib/service/kostService";
 import kriteriaService from "@/lib/service/kriteriaService";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import MyParagraph from "@/app/components/ui/paragraph";
+import MyButton from "@/app/components/ui/button";
 
 const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
-  const [kostData, setKostData] = useState<any>(null); // Change 'any' to match your data structure
-  const [kriteriaData, setKriteriaData] = useState<any>(null); // Change 'any' to match your data structure
+  const [kostData, setKostData] = useState<any>(null);
+  const [kriteriaData, setKriteriaData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,17 +46,32 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
         setLoading(false);
       }
     };
-    // Call the fetchDataById function when the component mounts
+
     fetchDataById();
-    // Cleanup function to cancel any pending requests on component unmount
     return () => {
       // Cleanup logic if needed
     };
   }, [params.id]);
+
+  const defaultValues = Object.fromEntries(
+    (kriteriaData || []).map((_: any, index: number) => ({
+      [`kriteriaId[${index}]`]: "0",
+    }))
+  );
+
+  const form = useForm({
+    defaultValues: defaultValues,
+  });
+
+  const onSubmit = async (values: any) => {
+    console.log("Form values:", values);
+    // Lakukan perhitungan metode moora atau kirim data ke database di sini
+  };
+
   return (
     <>
       {loading ? (
-        <p>Loading...</p>
+        <Loading />
       ) : (
         <>
           <div className="flex gap-4 flex-col">
@@ -52,20 +88,63 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
                 <MyHeading title={`Penilaian ${kostData.kost}`} />
               </div>
               <MySeparator label="horizontal" />
-              {/* Mapping over kriteriaData and rendering content for each kriteria */}
-              {kriteriaData.map((kriteria: any) => (
-                <div key={kriteria.id}>
-                  <MyHeading title={kriteria.kriteria} className="capitalize" />
-                  <h3>{kriteria.kriteria}</h3>
-                  {/* Mapping over subkriterias and rendering content for each subkriteria */}
-                  {kriteria.subkriterias.map((subkriteria: any) => (
-                    <div key={subkriteria.id}>
-                      <p>{subkriteria.subkriteria}</p>
-                      {/* Render other content for each subkriteria */}
+
+              <Form {...form}>
+                <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+                  {kriteriaData.map((kriteria: any, index: number) => (
+                    <div key={kriteria.id}>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <MyParagraph>{kriteria.kriteria}</MyParagraph>
+                          <FormField
+                            control={form.control}
+                            name={`kriteriaId[${index}]`}
+                            render={({ field }) => (
+                              <FormItem className="col-span-3" key={field.name}>
+                                <FormControl>
+                                  <Select
+                                    onValueChange={(value) =>
+                                      form.setValue(
+                                        `kriteriaId[${index}]`,
+                                        value
+                                      )
+                                    }
+                                  >
+                                    <SelectTrigger className="">
+                                      <SelectValue placeholder="Select subkriteria" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectGroup>
+                                        <SelectLabel>Sub kriteria</SelectLabel>
+                                        {kriteria.subkriterias.map(
+                                          (subkriteria: any) => (
+                                            <SelectItem
+                                              key={subkriteria.id}
+                                              value={subkriteria.bobot}
+                                            >
+                                              {subkriteria.subkriteria}
+                                            </SelectItem>
+                                          )
+                                        )}
+                                      </SelectGroup>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
                     </div>
                   ))}
-                </div>
-              ))}
+                  <MyButton
+                    text={loading ? " Creating please wait..." : "Add"}
+                    type="submit"
+                    disabled={loading ? true : false}
+                  />
+                </form>
+              </Form>
             </MyCard>
           </div>
         </>
@@ -73,4 +152,5 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
     </>
   );
 };
+
 export default PenilaianKostSuperAdmin;
