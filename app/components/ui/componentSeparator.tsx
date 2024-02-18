@@ -34,7 +34,7 @@ const ComponentSeparator = ({
         <MyHeading title={title} className="uppercase" />
         {subTitle && <MyLabel title={subTitle} />}
         <MySeparator label="horizontal" />
-        <div className="flex h-5 items-center text-sm">
+        <div className="flex h-5 items-center text-sm truncate text-ellipsis">
           {nav1 && (
             <MyParagraph>
               <Link href={link1 ?? "/admin/home"}>{nav1}</Link>

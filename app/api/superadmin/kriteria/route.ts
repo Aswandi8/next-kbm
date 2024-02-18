@@ -10,7 +10,11 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const path = request.nextUrl.pathname;
     revalidatePath(path);
-    const data = await prisma.kriteria.findMany();
+    const data = await prisma.kriteria.findMany({
+      include: {
+        subkriterias: true,
+      },
+    });
     const getData = JSON.parse(JSON.stringify(data));
     return NextResponse.json(
       {
