@@ -1,5 +1,6 @@
 import prisma from "@/prisma";
 import { connectToDatabase } from "../database";
+import { GetRelatedEventsByCategoryParams } from "@/types";
 
 type GetAllEventsParams = {
   query: string;
@@ -33,6 +34,7 @@ GetAllEventsParams) {
       skip: skipAmount,
       take: limit,
     });
+    console.log(data);
     return {
       data: JSON.parse(JSON.stringify(data)),
       totalPages: Math.ceil(totalCount / limit),
@@ -40,5 +42,7 @@ GetAllEventsParams) {
   } catch (error) {
     console.error("Error:", error);
     throw error;
+  } finally {
+    await prisma.$disconnect();
   }
 }

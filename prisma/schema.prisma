@@ -60,6 +60,7 @@ model dataKost{
   imageUrl      String[]
   price         String
   url           String
+  penilaians    Penilaian[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
 }
@@ -69,6 +70,7 @@ model Kriteria{
   kriteria      String    @unique 
   bobot         Int
   subkriterias  SubKriteria[]
+  penilaians    Penilaian[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
 }
@@ -77,8 +79,22 @@ model SubKriteria{
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   subkriteria   String    @unique 
   bobot         Int
-  kriterias      Kriteria @relation(fields: [kriteriaId], references: [id])
+  kriterias     Kriteria  @relation(fields: [kriteriaId], references: [id])
   kriteriaId    String @db.ObjectId
+  penilaians    Penilaian[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
+}
+
+model Penilaian{
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  nilai         Float
+  kosts         dataKost   @relation(fields: [kostId], references: [id])
+  kostId        String @db.ObjectId
+  kriterias     Kriteria   @relation(fields: [kriteriaId], references: [id])
+  kriteriaId    String @db.ObjectId
+  subKriterias  SubKriteria? @relation(fields: [subkriteriaId], references: [id])
+  subkriteriaId String @db.ObjectId 
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @default(now())
 }

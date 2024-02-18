@@ -74,3 +74,47 @@ export async function DELETE(
     await prisma.$disconnect();
   }
 }
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const kostId = await prisma.dataKost.findUnique({
+      where: {
+        id: params.id,
+      },
+    });
+    if (!kostId) {
+      return NextResponse.json(
+        {
+          message: `Data kost with this ${params.id} does not exist in the Database`,
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+    return NextResponse.json(
+      {
+        message: "Success",
+        data: kostId,
+      },
+      {
+        status: 201,
+      }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: "Internal Server Error",
+        error: error,
+      },
+      {
+        status: 500,
+      }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}

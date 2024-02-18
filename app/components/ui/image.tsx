@@ -3,9 +3,10 @@ type imageParams = {
   alt: string;
   src: string;
   className?: string;
+  onClick?: () => void;
 };
 
-const MyImage = ({ alt, src, className }: imageParams) => {
+const MyImage = ({ alt, src, className, onClick }: imageParams) => {
   return (
     <>
       <Image
@@ -16,6 +17,7 @@ const MyImage = ({ alt, src, className }: imageParams) => {
         priority={true}
         // priority={true}
         className={className}
+        onClick={onClick}
       />
     </>
   );

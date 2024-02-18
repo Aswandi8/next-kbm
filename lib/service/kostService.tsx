@@ -10,5 +10,6 @@ const kostService = {
         Authorization: token,
       },
     }),
+  getKostById: (id: string) => instance.get(`/api/superadmin/kost/${id}`),
 };
 export default kostService;

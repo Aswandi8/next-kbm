@@ -19,11 +19,13 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
   return (
     <div className="group relative flex  w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-gray-300 dark:bg-slate-800 shadow-md transition-all hover:shadow-lg ">
       <div className="block rounded-lg p-4 shadow-sm shadow-indigo-100">
-        <MyImage
-          src={myImage}
-          alt="kost"
-          className="h-56 w-full rounded-md object-cover"
-        />
+        <Link href={`/kost/${event.id}`}>
+          <MyImage
+            src={myImage}
+            alt="kost"
+            className="h-56 w-full rounded-md object-cover"
+          />
+        </Link>
 
         <div className="mt-2">
           <MyLabel title={`Rp. ${event.price} /bln`} />

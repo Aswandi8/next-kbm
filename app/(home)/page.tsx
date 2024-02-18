@@ -1,5 +1,3 @@
-// "use client";
-
 import { getAllKost } from "@/lib/service/homeService";
 import Collection from "../components/home/collection";
 import MyButton from "../components/ui/button";
