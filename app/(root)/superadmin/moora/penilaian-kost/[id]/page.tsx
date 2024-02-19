@@ -7,30 +7,40 @@ import MySeparator from "@/app/components/ui/separator";
 import kostService from "@/lib/service/kostService";
 import kriteriaService from "@/lib/service/kriteriaService";
 import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import MyParagraph from "@/app/components/ui/paragraph";
 import MyButton from "@/app/components/ui/button";
+import { Input } from "@/components/ui/input";
+import MyImage from "@/app/components/ui/image";
+
+const formSchema = z.object({
+  nilai: z
+    .array(
+      z.object({
+        nilai: z.coerce
+          .number() // Change this to number
+          .min(1, "Nilai must be at least 1 ")
+          .max(5, "Nilai must be at most 5"),
+      })
+    )
+    .refine((data) => data.length > 0, {
+      message: "At least one nilai is required",
+    }),
+});
 
 const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
   const [kostData, setKostData] = useState<any>(null);
-  const [kriteriaData, setKriteriaData] = useState<any>(null);
+  const [kriteriaData, setKriteriaData] = useState<any>([]); // Initialize with an empty array
+  const [totalSum, setTotalSum] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,20 +62,33 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
       // Cleanup logic if needed
     };
   }, [params.id]);
-
-  const defaultValues = Object.fromEntries(
-    (kriteriaData || []).map((_: any, index: number) => ({
-      [`kriteriaId[${index}]`]: "0",
-    }))
-  );
+  const defaultValues = kriteriaData
+    ? {
+        nilai: kriteriaData.map(() => ({ nilai: 0 })), // Use 0 or any other default number
+      }
+    : {};
 
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
   });
+  const onSubmit = async (data: any) => {
+    // Handle form submission, e.g., send data to server
+    console.log("Form data:", data);
+    const inputsArray = data.nilai.map(
+      (item: any) => parseFloat(item.nilai) || 0
+    );
+    const newTotalSum = inputsArray.reduce(
+      (acc: number, currentValue: number) => acc + currentValue,
+      0
+    );
+    const newData = {
+      id: params.id,
+      total_nilai: newTotalSum,
+    };
 
-  const onSubmit = async (values: any) => {
-    console.log("Form values:", values);
-    // Lakukan perhitungan metode moora atau kirim data ke database di sini
+    console.log(inputsArray);
+    console.log(newData);
   };
 
   return (
@@ -88,47 +111,49 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
                 <MyHeading title={`Penilaian ${kostData.kost}`} />
               </div>
               <MySeparator label="horizontal" />
-
+              <div className="flex gap-4 flex-col md:flex-row">
+                <div className="flex w-1/2 flex-wrap gap-4">
+                  <div className="w-full">
+                    <MyImage
+                      src={kostData.imageUrl[kostData.imageUrl.length - 1]}
+                      alt="kost"
+                      className="block rounded-lg object-cover object-center h-[300px]"
+                    />
+                  </div>
+                  {kostData.imageUrl.map((image: any, index: number) => (
+                    <div className="w-1/2" key={index}>
+                      <MyImage
+                        src={image}
+                        alt="kost"
+                        className="block h-[100px] rounded-lg object-cover object-center"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <h1>apa</h1>
+                </div>
+              </div>
               <Form {...form}>
-                <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                   {kriteriaData.map((kriteria: any, index: number) => (
                     <div key={kriteria.id}>
                       <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                          <MyParagraph>{kriteria.kriteria}</MyParagraph>
+                          <MyParagraph className="capitalize">
+                            {kriteria.kriteria}
+                          </MyParagraph>
                           <FormField
                             control={form.control}
-                            name={`kriteriaId[${index}]`}
+                            name={`nilai.${index}.nilai`}
                             render={({ field }) => (
-                              <FormItem className="col-span-3" key={field.name}>
+                              <FormItem>
                                 <FormControl>
-                                  <Select
-                                    onValueChange={(value) =>
-                                      form.setValue(
-                                        `kriteriaId[${index}]`,
-                                        value
-                                      )
-                                    }
-                                  >
-                                    <SelectTrigger className="">
-                                      <SelectValue placeholder="Select subkriteria" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectGroup>
-                                        <SelectLabel>Sub kriteria</SelectLabel>
-                                        {kriteria.subkriterias.map(
-                                          (subkriteria: any) => (
-                                            <SelectItem
-                                              key={subkriteria.id}
-                                              value={subkriteria.bobot}
-                                            >
-                                              {subkriteria.subkriteria}
-                                            </SelectItem>
-                                          )
-                                        )}
-                                      </SelectGroup>
-                                    </SelectContent>
-                                  </Select>
+                                  <Input
+                                    type="text"
+                                    placeholder="Nilai"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -139,9 +164,9 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
                     </div>
                   ))}
                   <MyButton
-                    text={loading ? " Creating please wait..." : "Add"}
+                    text={loading ? "Creating please wait..." : "Add"}
                     type="submit"
-                    disabled={loading ? true : false}
+                    disabled={loading}
                   />
                 </form>
               </Form>
