@@ -142,3 +142,82 @@ export const linksSuperAdmin = [
     ],
   },
 ];
+
+export const linksKeuangan = [
+  {
+    title: "Dashboard",
+    links: [
+      {
+        name: "home",
+        path: "/keuangan/home",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "account",
+        path: "/keuangan/account",
+        icon: <FaRegUser />,
+      },
+    ],
+  },
+  {
+    title: "Accounting",
+    links: [
+      {
+        name: "penjualan",
+        path: "/keuangan/penjualan",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "pembelian",
+        path: "/keuangan/pembelian",
+        icon: <IoHomeOutline />,
+      },
+
+      {
+        name: "biaya",
+        path: "/keuangan/biaya",
+        icon: <IoHomeOutline />,
+      },
+    ],
+  },
+  {
+    title: "neraca",
+    links: [
+      {
+        name: "laba rugi",
+        path: "/keuangan/neraca",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "neraca kas",
+        path: "/keuangan/neraca/kas",
+        icon: <FaRegUser />,
+      },
+    ],
+  },
+  {
+    title: "Laporan",
+    links: [
+      {
+        name: "Laporan Pembelian ",
+        path: "/keuangan/lp-pembelian",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Laporan Penjualan",
+        path: "/keuangan/lp-penjualan",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Laporan Neraca",
+        path: "/keuangan/lp-neraca",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Laporan Biaya",
+        path: "/keuangan/lp-biaya",
+        icon: <IoHomeOutline />,
+      },
+    ],
+  },
+];
