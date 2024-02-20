@@ -14,7 +14,7 @@ const MooraSuperAdmin = () => {
           active="Metode Moora"
         />
         <Tabs defaultValue="alternatif" className="w-full">
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex sm:flex-col flex-row items-center justify-center">
             <TabsList className="gap-6">
               <TabsTrigger value="alternatif">Alternatif</TabsTrigger>
               <TabsTrigger value="normalisasi">Normalisasi</TabsTrigger>
