@@ -10,7 +10,32 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const path = request.nextUrl.pathname;
     revalidatePath(path);
-    const data = await prisma.dataKost.findMany();
+
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+
+    const startOfNextMonth = new Date();
+    startOfNextMonth.setMonth(startOfNextMonth.getMonth() + 1);
+    startOfNextMonth.setDate(1);
+
+    const currentDate = new Date();
+
+    const data = await prisma.dataKost.findMany({
+      include: {
+        penilaians: {
+          where: {
+            createdAt: {
+              gte: startOfMonth,
+              lt: currentDate,
+            },
+          },
+        },
+      },
+    });
+
+    // const data = await prisma.dataKost.findMany({
+    //   include: { penilaians: true },
+    // });
     const getData = JSON.parse(JSON.stringify(data));
     return NextResponse.json(
       {

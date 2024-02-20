@@ -7,6 +7,7 @@ import MyImage from "@/app/components/ui/image";
 import Link from "next/link";
 import { FaPencil } from "react-icons/fa6";
 import { useStateContext } from "@/context/ContextProvider";
+import { Badge } from "@/components/ui/badge";
 
 const useIconColor = () => {
   const { currentColor } = useStateContext();
@@ -86,13 +87,24 @@ export const columns: ColumnDef<kostParamsHomes>[] = [
     id: "actions",
     cell: ({ row }) => {
       const dataKost = row.original;
+      const cek = dataKost.penilaians.length;
+      console.log(cek);
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const iconColor = useIconColor();
       return (
         <div className="flex items-center gap-2">
-          <Link href={`/superadmin/moora/penilaian-kost/${dataKost.id}`}>
-            <FaPencil style={{ color: iconColor }} />
-          </Link>
+          {cek > 0 ? (
+            <>
+              <Badge>Selesai</Badge>
+            </>
+          ) : (
+            <>
+              <Link href={`/superadmin/moora/penilaian-kost/${dataKost.id}`}>
+                <FaPencil style={{ color: iconColor }} />
+              </Link>
+            </>
+          )}
+          {/*  */}
         </div>
       );
     },

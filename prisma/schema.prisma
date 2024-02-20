@@ -70,7 +70,7 @@ model Kriteria{
   kriteria      String    @unique 
   bobot         Int
   subkriterias  SubKriteria[]
-  penilaians    Penilaian[]
+  // penilaians    Penilaian[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
 }
@@ -81,20 +81,21 @@ model SubKriteria{
   bobot         Int
   kriterias     Kriteria  @relation(fields: [kriteriaId], references: [id])
   kriteriaId    String @db.ObjectId
-  penilaians    Penilaian[]
+  // penilaians    Penilaian[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
 }
 
 model Penilaian{
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  nilai         Float
+  nilai         Int[]
+  sumNilai      Float
   kosts         dataKost   @relation(fields: [kostId], references: [id])
   kostId        String @db.ObjectId
-  kriterias     Kriteria   @relation(fields: [kriteriaId], references: [id])
-  kriteriaId    String @db.ObjectId
-  subKriterias  SubKriteria? @relation(fields: [subkriteriaId], references: [id])
-  subkriteriaId String @db.ObjectId 
+  // kriterias     Kriteria   @relation(fields: [kriteriaId], references: [id])
+  // kriteriaId    String @db.ObjectId
+  // subKriterias  SubKriteria? @relation(fields: [subkriteriaId], references: [id])
+  // subkriteriaId String @db.ObjectId 
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @default(now())
 }

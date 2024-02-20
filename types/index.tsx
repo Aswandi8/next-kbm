@@ -25,6 +25,7 @@ export type kostParamsHomes = {
   room: string;
   description: string;
   location: string;
+  penilaians: number[];
   imageUrl: string[];
   price: string;
   url: string;

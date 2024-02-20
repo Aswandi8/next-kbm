@@ -5,6 +5,7 @@ import MySeparator from "@/app/components/ui/separator";
 import kostService from "@/lib/service/kostService";
 import { DataTable } from "./tabelPenilaian";
 import { columns } from "./columns";
+export const dynamic = "force-dynamic";
 async function getAllDataKost() {
   const res = await kostService.getAllKost();
   if (!res.data) {

@@ -21,6 +21,10 @@ import MyParagraph from "@/app/components/ui/paragraph";
 import MyButton from "@/app/components/ui/button";
 import { Input } from "@/components/ui/input";
 import MyImage from "@/app/components/ui/image";
+import penilaianService from "@/lib/service/penilaianService";
+import { AxiosError, AxiosResponse } from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   nilai: z
@@ -38,10 +42,11 @@ const formSchema = z.object({
 });
 
 const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
+  const router = useRouter();
   const [kostData, setKostData] = useState<any>(null);
   const [kriteriaData, setKriteriaData] = useState<any>([]); // Initialize with an empty array
-  const [totalSum, setTotalSum] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchDataById = async () => {
@@ -62,6 +67,10 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
       // Cleanup logic if needed
     };
   }, [params.id]);
+  const handleImageClick = (index: any) => {
+    // Update the selected image index
+    setSelectedImageIndex(index);
+  };
   const defaultValues = kriteriaData
     ? {
         nilai: kriteriaData.map(() => ({ nilai: 0 })), // Use 0 or any other default number
@@ -74,7 +83,6 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
   });
   const onSubmit = async (data: any) => {
     // Handle form submission, e.g., send data to server
-    console.log("Form data:", data);
     const inputsArray = data.nilai.map(
       (item: any) => parseFloat(item.nilai) || 0
     );
@@ -82,13 +90,37 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
       (acc: number, currentValue: number) => acc + currentValue,
       0
     );
+    const transformedArray = data.nilai.map((item: any) => item.nilai);
     const newData = {
-      id: params.id,
-      total_nilai: newTotalSum,
+      kostId: params.id,
+      nilai: transformedArray,
+      sumNilai: newTotalSum,
     };
-
-    console.log(inputsArray);
-    console.log(newData);
+    await penilaianService
+      .addPenilaian(newData)
+      .then((response: AxiosResponse) => {
+        // Handle response
+        toast.success(
+          "Penilaian kost created successfully",
+          response.data.message
+        );
+        setLoading(false);
+        form.reset();
+        router.replace("/superadmin/moora/penilaian-kost");
+        router.refresh();
+      })
+      .catch((reason: AxiosError<{ additionalInfo: string }>) => {
+        if (reason.response?.status === 400) {
+          // Handle 400
+          setLoading(false);
+          toast.error(
+            "Kost sudah dilakukan penilaian bulan ini, harap melakukan penilaian bulan berikutnya"
+          );
+        } else {
+          setLoading(false);
+          toast.error("Oops Something Went wrong");
+        }
+      });
   };
 
   return (
@@ -111,65 +143,72 @@ const PenilaianKostSuperAdmin = ({ params }: { params: { id: string } }) => {
                 <MyHeading title={`Penilaian ${kostData.kost}`} />
               </div>
               <MySeparator label="horizontal" />
-              <div className="flex gap-4 flex-col md:flex-row">
-                <div className="flex w-1/2 flex-wrap gap-4">
-                  <div className="w-full">
-                    <MyImage
-                      src={kostData.imageUrl[kostData.imageUrl.length - 1]}
-                      alt="kost"
-                      className="block rounded-lg object-cover object-center h-[300px]"
-                    />
+              <div className="flex gap-6 mt-6 flex-col md:flex-row">
+                <div className="flex flex-col gap-4 w-full  items-center">
+                  <MyImage
+                    src={kostData.imageUrl[selectedImageIndex]}
+                    // src={kostData.imageUrl[kostData.imageUrl.length - 1]}
+                    alt="kost"
+                    className="block rounded-lg object-cover object-center h-[300px] w-full sm:w-auto"
+                  />
+                  <div className="flex flex-row w-full gap-4  justify-center">
+                    {kostData.imageUrl.map((image: any, index: number) => (
+                      <div className="" key={index}>
+                        <MyImage
+                          src={image}
+                          alt="Product"
+                          className="block w-[100px] h-auto rounded-lg object-cover object-center cursor-pointer"
+                          onClick={() => handleImageClick(index)} // Handle click event
+                        />
+                      </div>
+                    ))}
                   </div>
-                  {kostData.imageUrl.map((image: any, index: number) => (
-                    <div className="w-1/2" key={index}>
-                      <MyImage
-                        src={image}
-                        alt="kost"
-                        className="block h-[100px] rounded-lg object-cover object-center"
-                      />
-                    </div>
-                  ))}
                 </div>
-                <div>
-                  <h1>apa</h1>
-                </div>
-              </div>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  {kriteriaData.map((kriteria: any, index: number) => (
-                    <div key={kriteria.id}>
+                <div className="w-full">
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                      {kriteriaData.map((kriteria: any, index: number) => (
+                        <div key={kriteria.id}>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <MyParagraph className="capitalize">
+                                {kriteria.kriteria}
+                              </MyParagraph>
+                              <FormField
+                                control={form.control}
+                                name={`nilai.${index}.nilai`}
+                                render={({ field }) => (
+                                  <FormItem className="col-span-3">
+                                    <FormControl>
+                                      <Input
+                                        type="text"
+                                        placeholder="Nilai"
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                       <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                          <MyParagraph className="capitalize">
-                            {kriteria.kriteria}
-                          </MyParagraph>
-                          <FormField
-                            control={form.control}
-                            name={`nilai.${index}.nilai`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    type="text"
-                                    placeholder="Nilai"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
+                          {/* MyButton component */}
+                          <MyButton
+                            text={loading ? "Creating please wait..." : "Add"} // Button text depends on the 'loading' state
+                            type="submit" // Button type is set to 'submit'
+                            disabled={loading} // Button is disabled when 'loading' is true
+                            className="col-start-2 grid-column-end" // Additional classes for styling (tailwind CSS)
                           />
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  <MyButton
-                    text={loading ? "Creating please wait..." : "Add"}
-                    type="submit"
-                    disabled={loading}
-                  />
-                </form>
-              </Form>
+                    </form>
+                  </Form>
+                </div>
+              </div>
             </MyCard>
           </div>
         </>
