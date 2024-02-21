@@ -221,3 +221,92 @@ export const linksKeuangan = [
     ],
   },
 ];
+export const linksTeknisi = [
+  {
+    title: "Dashboard",
+    links: [
+      {
+        name: "home",
+        path: "/teknisi/home",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "account",
+        path: "/teknisi/account",
+        icon: <FaRegUser />,
+      },
+    ],
+  },
+  {
+    title: "Teknisi",
+    links: [
+      {
+        name: "Sparepart",
+        path: "/teknisi/sparepart",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Pekerjaan",
+        path: "/teknisi/pekerjaan",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Data Survey",
+        path: "/teknisi/survey",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Laporan Teknisi",
+        path: "/teknisi/laporan",
+        icon: <IoHomeOutline />,
+      },
+    ],
+  },
+];
+export const linksMarketing = [
+  {
+    title: "Dashboard",
+    links: [
+      {
+        name: "home",
+        path: "/marketing/home",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "account",
+        path: "/marketing/account",
+        icon: <FaRegUser />,
+      },
+    ],
+  },
+  {
+    title: "Marketing",
+    links: [
+      {
+        name: "Rekanan",
+        path: "/marketing/rekanan",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Sparepart",
+        path: "/marketing/mark-sparepart",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Data Survey",
+        path: "/marketing/mark-survey",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Penawaran",
+        path: "/marketing/penawaran",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "Laporan",
+        path: "/marketing/mark-laporan",
+        icon: <IoHomeOutline />,
+      },
+    ],
+  },
+];

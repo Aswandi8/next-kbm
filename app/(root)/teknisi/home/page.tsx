@@ -9,7 +9,7 @@ const HomeTeknisi = () => {
         text="Logout"
         customFunc={() => signOut({ callbackUrl: "/auth/sign-in" })}
       />
-      <h1>Home Keuangan</h1>
+      <h1>Home Teknisi</h1>
     </div>
   );
 };

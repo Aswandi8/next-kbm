@@ -1,7 +1,7 @@
 import ComponentSeparator from "@/app/components/ui/componentSeparator";
 import MyLoading from "@/app/components/ui/myloading";
 
-const AccountKeuangan = () => {
+const AccountTeknisi = () => {
   return (
     <>
       <div className="flex gap-4 flex-col">
@@ -9,7 +9,7 @@ const AccountKeuangan = () => {
           title="Account"
           subTitle="My Profile"
           nav1="Dashboard"
-          link1="/keuangan/account"
+          link1="/teknisi/account"
           active="Account"
         />
         <MyLoading />
@@ -18,4 +18,4 @@ const AccountKeuangan = () => {
     </>
   );
 };
-export default AccountKeuangan;
+export default AccountTeknisi;
