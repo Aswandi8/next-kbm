@@ -1,8 +1,10 @@
 "use client";
 import MyButton from "@/app/components/ui/button";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const HomeLogistic = () => {
+  const session = useSession();
+  console.log(session);
   return (
     <div>
       <MyButton

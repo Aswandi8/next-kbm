@@ -9,6 +9,9 @@ const HomeKeuangan = () => {
         text="Logout"
         customFunc={() => signOut({ callbackUrl: "/auth/sign-in" })}
       />
+      <div>
+        <h1>sdfhsdf</h1>
+      </div>
       <h1>Home Keuangan</h1>
     </div>
   );

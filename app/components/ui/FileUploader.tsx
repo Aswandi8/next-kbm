@@ -5,7 +5,7 @@ type FileUploaderProps = {
   onFieldChange: (url: string) => void;
   imageUrl: string;
   setFiles: Dispatch<SetStateAction<File[]>>;
-  countImage: number;
+  countImage?: number;
 };
 
 import { useDropzone } from "@uploadthing/react";
@@ -25,10 +25,13 @@ export function FileUploader({
   countImage,
 }: FileUploaderProps) {
   const { currentColor } = useStateContext();
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
-    onFieldChange(convertFileToUrl(acceptedFiles[1]));
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setFiles(acceptedFiles);
+      onFieldChange(convertFileToUrl(acceptedFiles[1]));
+    },
+    [onFieldChange, setFiles]
+  );
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: "image/*" ? generateClientDropzoneAccept(["image/*"]) : undefined,

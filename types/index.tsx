@@ -8,6 +8,36 @@ export type usersParams = {
   type: string;
 };
 
+export type dataSparepartParams = {
+  sparepart: string;
+  produksi: string;
+  stock: number;
+  spesifikasi: string;
+  merek: string;
+  imageUrl: string[];
+};
+
+export type dataTableSparepartParams = {
+  id: string;
+  sparepart: string;
+  produksi: string;
+  stock: number;
+  spesifikasi: string;
+  merek: string;
+  imageUrl: string[];
+};
+
+export type updateSparepartParams = {
+  id: string;
+  sparepart: string;
+  produksi: string;
+  stock: number;
+  spesifikasi: string;
+  merek: string;
+  imageUrl: string;
+};
+
+// Faisal
 export type kostParams = {
   kost: string;
   category: string;
