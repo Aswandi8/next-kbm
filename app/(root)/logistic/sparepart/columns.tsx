@@ -1,29 +1,53 @@
 "use client";
-// import { CreatedKriteriaParams } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/app/components/data-tabel/DataTableColumnHeader";
-// import UpdateKriteria from "./updateKriteria";
-// import DeleteKriteria from "./daleteKriteria";
-type columsParams = {
-  id: string;
-  type: string;
-  merek: string;
-  stock: number;
-  spesifikasi: string;
-  product: {
-    sparepart: string;
-    produksi: string;
-  };
+import { dataTableSparepartParams } from "@/types";
+import MyImage from "@/app/components/ui/image";
+import Link from "next/link";
+import { FaPencil } from "react-icons/fa6";
+import { useStateContext } from "@/context/ContextProvider";
+import { useEffect, useState } from "react";
+const useIconColor = () => {
+  const { currentColor } = useStateContext();
+  const [iconColor, setIconColor] = useState(currentColor);
+
+  useEffect(() => {
+    setIconColor(currentColor);
+  }, [currentColor]);
+
+  return iconColor;
 };
-export const columns: ColumnDef<columsParams>[] = [
+export const columns: ColumnDef<dataTableSparepartParams>[] = [
   {
-    accessorKey: "product.sparepart",
+    accessorKey: "imageUrl",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Image" />
+    ),
+    cell: ({ row }) => {
+      const value: string = row.getValue("imageUrl");
+      const leny = value.length - 1;
+      const myImage = value[value.length - 1];
+      return (
+        <>
+          <div className=" h-10 w-10">
+            <MyImage
+              alt="hero"
+              src={myImage}
+              className="h-full w-full rounded-full object-cover object-center"
+            />
+          </div>
+        </>
+      );
+    },
+  },
+  {
+    accessorKey: "sparepart",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Sparepart" />
     ),
   },
   {
-    accessorKey: "product.produksi",
+    accessorKey: "produksi",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Produksi" />
     ),
@@ -35,26 +59,31 @@ export const columns: ColumnDef<columsParams>[] = [
     ),
   },
   {
-    accessorKey: "type",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Type" />
-    ),
-  },
-  {
     accessorKey: "stock",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Stock" />
     ),
   },
   {
+    accessorKey: "spesifikasi",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Spesifikasi" />
+    ),
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
-      const kriteria = row.original;
+      const sparepart = row.original;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const iconColor = useIconColor();
 
       return (
         <div className="flex items-center gap-2">
+          <Link href={`/logistic/sparepart/update-sparepart/${sparepart.id}`}>
+            <FaPencil style={{ color: iconColor }} />
+          </Link>
           {/* <UpdateKriteria kriteria={kriteria} />
-          <DeleteKriteria kriteria={kriteria} /> */}
+      <DeleteKriteria kriteria={kriteria} */}
         </div>
       );
     },

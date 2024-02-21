@@ -10,13 +10,5 @@ const kriteriaService = {
         Authorization: token,
       },
     }),
-  //   addKost: (dataKost: kostParams) =>
-  //     instance.post("/api/superadmin/kost", dataKost),
-  //   deleteKost: (id: string, token: string) =>
-  //     instance.delete(`/api/superadmin/kost/${id}`, {
-  //       headers: {
-  //         Authorization: token,
-  //       },
-  //     }),
 };
 export default kriteriaService;

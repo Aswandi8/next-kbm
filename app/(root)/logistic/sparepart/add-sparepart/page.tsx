@@ -3,8 +3,6 @@ import MyCard from "@/app/components/ui/card";
 import ComponentSeparator from "@/app/components/ui/componentSeparator";
 import MyHeading from "@/app/components/ui/heading";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { Input } from "@/components/ui/input";
 import { useStateContext } from "@/context/ContextProvider";
 import {
@@ -14,49 +12,106 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import MyButton from "@/app/components/ui/button";
 import MyParagraph from "@/app/components/ui/paragraph";
-import MySpan from "@/app/components/ui/span";
 import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
 import sparepartService from "@/lib/service/sparepartService";
 import { AxiosError, AxiosResponse } from "axios";
+import { FileUploader } from "@/app/components/ui/FileUploader";
+import { useUploadThing } from "@/lib/uploadthing/uploadthing";
+import { useSession } from "next-auth/react";
+
+const formSchema = z.object({
+  sparepart: z.string().min(3, "Sparepart must be at least 3 characters"),
+  produksi: z.string().min(3, "Produksi must be at least 3 characters"),
+  merek: z.string().min(3, "Merk must be at least 3 characters"),
+  stock: z.coerce.number().min(1, "Bobot must be at least 10").max(100),
+  spesifikasi: z.string().min(3, "Spesifikasi must be at least 3 characters"),
+  imageUrl: z.string(),
+});
 
 const AddSparepart = () => {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errorProduksi, setErrorProduksi] = useState("");
-  const [errorMerek, setErrorMerek] = useState("");
-  const [errorType, setErrorType] = useState("");
-  const [errorStock, setErrorStock] = useState("");
-  const [errorSpesifikasi, setErrorSpesifikasi] = useState("");
-  const [stockCount, setStockCount] = useState([
-    { type: "", stock: 0, spesifikasi: "", merek: "" },
-  ]);
-  const [produksi, setProduksi] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
   const { currentColor } = useStateContext();
-  const formSchema = yup.object().shape({
-    sparepart: yup.string().required("sparepart is required"),
-  });
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(formSchema) });
+  const session: any = useSession();
 
-  const handleStock = (e: any, index: number, type: string) => {
-    const values: any = [...stockCount];
-    values[index][type] = e.target.value;
-    setStockCount(values);
-  };
-  const onSelectProduksi = (produksiSelect: string) => {
-    setProduksi(produksiSelect);
-  };
-  async function onSubmit(data: any) {}
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      sparepart: "",
+      produksi: "",
+      merek: "",
+      stock: 0,
+      spesifikasi: "",
+      imageUrl: "",
+    },
+  });
+
+  const { startUpload } = useUploadThing("imageUploader");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    const uploadedImageUrl: string[] = [];
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+      if (!uploadedImages) {
+        setLoading(false);
+        return;
+      }
+      uploadedImages.forEach((image) => {
+        uploadedImageUrl.push(image.url);
+      });
+    } else {
+      toast.error("Max upload 10 image");
+      setLoading(false);
+      return;
+    }
+    const newData = {
+      ...values,
+      imageUrl: uploadedImageUrl,
+    };
+
+    await sparepartService
+      .addSparepart(newData, session.data?.user.access_token)
+      .then((response: AxiosResponse) => {
+        setLoading(false);
+        toast.success("Data sparepart created successfully");
+        form.reset();
+        router.replace("/logistic/sparepart");
+        router.refresh();
+      })
+      .catch((reason: AxiosError<{ additionalInfo: string }>) => {
+        if (reason.response?.status === 400) {
+          setLoading(false);
+          toast.error("Data Sparepart already exists");
+        } else if (reason.response?.status === 401) {
+          setLoading(false);
+          toast.error("Unauthorized token");
+        } else if (reason.response?.status === 404) {
+          setLoading(false);
+          toast.error("Data sparepart not found");
+        } else if (reason.response?.status === 406) {
+          setLoading(false);
+          toast.error("Not acceptable");
+        } else {
+          setLoading(false);
+          toast.error("Oops Something Went wrong");
+        }
+      });
+  }
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -71,128 +126,134 @@ const AddSparepart = () => {
         />
         <MyCard>
           <MyHeading title="Add Data Sparepart" className="mb-3" />
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <MyHeading title="Data Sparepart" className="mb-3" />
-            <div className="grid gap-6 mb-6 md:grid-cols-2">
-              <div>
-                <MyParagraph className="mb-2">Sparepart</MyParagraph>
-                <Input
-                  type="text"
-                  {...register("sparepart")}
-                  id="sparepart"
-                  name="sparepart"
-                  placeholder="Sparepart"
-                  style={{ border: `1px solid ${currentColor}` }}
-                  className={`border outline-offset-0 dark:placeholder:text-gray-500 dark:text-gray-200 text-slate-800 placeholder:text-gray-400 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 shadow-sm bg-transparent`}
-                />
-                {errors.sparepart?.message && (
-                  <small className="text-red-600/60 text-sm  -mt-2">
-                    {errors.sparepart?.message}
-                  </small>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-5"
+            >
+              <FormField
+                control={form.control}
+                name="sparepart"
+                render={({ field }) => (
+                  <FormItem>
+                    <MyParagraph>Sparepart</MyParagraph>
+                    <FormControl>
+                      <Input type="text" placeholder="Sparepart" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </div>
-              <div>
-                <MyParagraph className="mb-2">Produksi</MyParagraph>
-                <Select
-                  onValueChange={(value: string) => onSelectProduksi(value)}
-                >
-                  <SelectTrigger
-                    style={{ border: `1px solid ${currentColor}` }}
-                    className={`border outline-offset-0 dark:placeholder:text-gray-500 dark:text-gray-200 text-slate-800 placeholder:text-slate-300 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 shadow-sm bg-transparent`}
-                  >
-                    <SelectValue placeholder="Produksi" />
-                  </SelectTrigger>
-                  <SelectContent className="">
-                    <SelectItem value="Lokal">Lokal</SelectItem>
-                    <SelectItem value="China">China</SelectItem>
-                    <SelectItem value="Workshop">Workshop</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errorProduksi && (
-                  <small className="text-red-600/60 text-sm  -mt-2">
-                    {errorProduksi}
-                  </small>
-                )}
-              </div>
-            </div>
-            <MyHeading title="Type Sparepart" className="mb-3" />
-            {stockCount.map(
-              (
-                item: {
-                  type: string;
-                  stock: number;
-                  spesifikasi: string;
-                  merek: string;
-                },
-                index: number
-              ) => (
-                <div key={index} className="flex flex-col gap-4 mb-6">
-                  <div className="grid gap-6 md:grid-cols-3">
-                    <div>
-                      <MyParagraph className="mb-2">Merek</MyParagraph>
-                      <Input
-                        type="text"
-                        id="merek"
-                        name="merek"
-                        placeholder="Merek"
-                        style={{ border: `1px solid ${currentColor}` }}
-                        className={`border outline-offset-0 dark:placeholder:text-gray-500 dark:text-gray-200 text-slate-800 placeholder:text-gray-400 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 shadow-sm bg-transparent`}
-                        onChange={(e) => handleStock(e, index, "merek")}
-                      />
-                    </div>
-                    <div>
-                      <MyParagraph className="mb-2">Type</MyParagraph>
-                      <Input
-                        type="text"
-                        id="type"
-                        name="type"
-                        placeholder="type"
-                        style={{ border: `1px solid ${currentColor}` }}
-                        className={`border outline-offset-0 dark:placeholder:text-gray-500 dark:text-gray-200 text-slate-800 placeholder:text-gray-400 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 shadow-sm bg-transparent`}
-                        onChange={(e) => handleStock(e, index, "type")}
-                      />
-                    </div>
-                    <div>
-                      <MyParagraph className="mb-2">Stock</MyParagraph>
-                      <Input
-                        type="number"
-                        id="stock"
-                        name="stock"
-                        placeholder="stock"
-                        style={{ border: `1px solid ${currentColor}` }}
-                        className={`border outline-offset-0 dark:placeholder:text-gray-500 dark:text-gray-200 text-slate-800 placeholder:text-gray-400 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 shadow-sm bg-transparent`}
-                        onChange={(e) => handleStock(e, index, "stock")}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <MyParagraph className="mb-2">Spesifikasi</MyParagraph>
-                    <Textarea
-                      placeholder="Spesifikasi sparepart"
-                      id="spesifikasi"
-                      name="spesifikasi"
-                      style={{ border: `1px solid ${currentColor}` }}
-                      className={`border outline-offset-0 dark:placeholder:text-gray-500 dark:text-gray-200 text-slate-800 placeholder:text-gray-400 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 shadow-sm bg-transparent`}
-                      onChange={(e) => handleStock(e, index, "spesifikasi")}
-                    />
-                  </div>
-                </div>
-              )
-            )}
-            <div className="flex justify-end">
-              <MyButton
-                text="Add New Type Sparepart"
-                type="button"
-                customFunc={() =>
-                  setStockCount([
-                    ...stockCount,
-                    { type: "", stock: 0, spesifikasi: "", merek: "" },
-                  ])
-                }
               />
-            </div>
-            <MyButton text={loading ? "Loading..." : "Submit"} type="submit" />
-          </form>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <FormField
+                  control={form.control}
+                  name="produksi"
+                  render={({ field }) => (
+                    <FormItem>
+                      <MyParagraph>Produksi</MyParagraph>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl
+                          style={{ border: `1px solid ${currentColor}` }}
+                        >
+                          <SelectTrigger className="bg-background/50">
+                            <SelectValue placeholder="Select a produksi to display" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent
+                          style={{ border: `1px solid ${currentColor}` }}
+                        >
+                          <SelectItem
+                            value="Local"
+                            className="select-item p-regular-14"
+                          >
+                            Local
+                          </SelectItem>
+                          <SelectItem
+                            value="China"
+                            className="select-item p-regular-14"
+                          >
+                            China
+                          </SelectItem>
+                          <SelectItem
+                            value="Workshop"
+                            className="select-item p-regular-14"
+                          >
+                            Workshop
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="merek"
+                  render={({ field }) => (
+                    <FormItem>
+                      <MyParagraph>Merek</MyParagraph>
+                      <FormControl>
+                        <Input type="text" placeholder="Merek" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="stock"
+                  render={({ field }) => (
+                    <FormItem>
+                      <MyParagraph>Stock</MyParagraph>
+                      <FormControl>
+                        <Input type="number" placeholder="Stock" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormField
+                control={form.control}
+                name="spesifikasi"
+                render={({ field }) => (
+                  <FormItem>
+                    <MyParagraph>Sparepart</MyParagraph>
+                    <FormControl>
+                      <Textarea placeholder="Spesifikasi" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <MyParagraph>Image</MyParagraph>
+                    <FormControl>
+                      <FileUploader
+                        onFieldChange={field.onChange}
+                        imageUrl={field.value}
+                        setFiles={setFiles}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <div>
+                <MyButton
+                  text={loading ? "Loading..." : "Add Data"}
+                  type="submit"
+                  disabled={loading ? true : false}
+                />
+              </div>
+            </form>
+          </Form>
         </MyCard>
       </div>
     </>

@@ -34,7 +34,6 @@ GetAllEventsParams) {
       skip: skipAmount,
       take: limit,
     });
-    console.log(data);
     return {
       data: JSON.parse(JSON.stringify(data)),
       totalPages: Math.ceil(totalCount / limit),

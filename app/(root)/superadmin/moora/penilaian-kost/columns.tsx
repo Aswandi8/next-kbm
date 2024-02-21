@@ -88,7 +88,6 @@ export const columns: ColumnDef<kostParamsHomes>[] = [
     cell: ({ row }) => {
       const dataKost = row.original;
       const cek = dataKost.penilaians.length;
-      console.log(cek);
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const iconColor = useIconColor();
       return (
