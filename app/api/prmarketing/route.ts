@@ -3,7 +3,7 @@ import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
 import { revalidatePath } from "next/cache";
 import jwt from "jsonwebtoken";
-import { dataSparepartParams } from "@/types";
+import { dataPrMarketingParams } from "@/types";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const path = request.nextUrl.pathname;
     revalidatePath(path);
-    const data = await prisma.dataSparepart.findMany();
+    const data = await prisma.prMarketing.findMany();
     const getData = JSON.parse(JSON.stringify(data));
     return NextResponse.json(
       {
@@ -40,33 +40,39 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     connectToDatabase();
-    const data: dataSparepartParams = await request.json();
+    const data: dataPrMarketingParams = await request.json();
     const token = request.headers.get("Authorization") || "";
     if (token) {
       var decoded: any = jwt.verify(token, process.env.NEXTAUTH_SECRET || "");
       if (decoded) {
-        const existingDataSparepart = await prisma.dataSparepart.findFirst({
-          where: { sparepart: data.sparepart },
+        const existingPrMrketing = await prisma.prMarketing.findFirst({
+          where: { noPR: data.noPR },
         });
-        if (existingDataSparepart) {
+        if (existingPrMrketing) {
           return NextResponse.json(
             {
-              message: "Data sparepart already exists in the Database",
+              message: "No.PrMarketing already exists in the Database",
             },
             {
               status: 400,
             }
           );
         }
-        const datasparepart = await prisma.dataSparepart.create({
-          data: data,
+        const prMarketing = await prisma.prMarketing.create({
+          data: {
+            sparepartId: data.sparepartId,
+            rekananId: data.rekananId,
+            qty: data.qty,
+            ket: data.ket,
+            noPR: data.noPR,
+          },
         });
         const path = request.nextUrl.pathname;
         revalidatePath(path);
         return NextResponse.json(
           {
             message: "Success",
-            Data: datasparepart,
+            Data: prMarketing,
           },
           {
             status: 200,

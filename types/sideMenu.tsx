@@ -142,3 +142,156 @@ export const linksSuperAdmin = [
     ],
   },
 ];
+
+export const linksKeuangan = [
+  {
+    title: "Dashboard",
+    links: [
+      {
+        name: "home",
+        path: "/keuangan/home",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "account",
+        path: "/keuangan/account",
+        icon: <FaRegUser />,
+      },
+    ],
+  },
+
+  {
+    title: "Accounting",
+    links: [
+      {
+        name: "Penjualan",
+        path: "/keuangan/penjualan",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Pembelian",
+        path: "/keuangan/pembelian",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Biaya",
+        path: "/keuangan/biaya",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Laporan",
+        path: "/keuangan/laporan",
+        icon: <HiOutlineHomeModern />,
+      },
+    ],
+  },
+
+  {
+    title: "Neraca",
+    links: [
+      {
+        name: "Laba Rugi",
+        path: "/keuangan/laba-rugi",
+        icon: <MdOutlineAddHome />,
+      },
+      {
+        name: "Neraca Kas",
+        path: "/keuangan/kas",
+        icon: <LiaLayerGroupSolid />,
+      },
+    ],
+  },
+];
+
+export const linksMarketing = [
+  {
+    title: "Dashboard",
+    links: [
+      {
+        name: "home",
+        path: "/marketing/home",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "account",
+        path: "/marketing/account",
+        icon: <FaRegUser />,
+      },
+    ],
+  },
+
+  {
+    title: "Marketing",
+    links: [
+      {
+        name: "Rekanan",
+        path: "/marketing/rekanan",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Sparepart",
+        path: "/marketing/sparepart",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Data Survey",
+        path: "/marketing/survey",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Laporan",
+        path: "/marketing/laporan",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Penawaran",
+        path: "/marketing/penawaran",
+        icon: <HiOutlineHomeModern />,
+      },
+    ],
+  },
+];
+
+export const linksTeknisi = [
+  {
+    title: "Dashboard",
+    links: [
+      {
+        name: "home",
+        path: "/teknisi/home",
+        icon: <IoHomeOutline />,
+      },
+      {
+        name: "account",
+        path: "/teknisi/account",
+        icon: <FaRegUser />,
+      },
+    ],
+  },
+
+  {
+    title: "Teknisi",
+    links: [
+      {
+        name: "Pekerjaan",
+        path: "/teknisi/pekerjaan",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Sparepart",
+        path: "/teknisi/sparepart",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Data Survey",
+        path: "/teknisi/survey",
+        icon: <HiOutlineHomeModern />,
+      },
+      {
+        name: "Laporan",
+        path: "/teknisi/laporan",
+        icon: <HiOutlineHomeModern />,
+      },
+    ],
+  },
+];

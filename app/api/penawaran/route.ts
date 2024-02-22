@@ -3,7 +3,7 @@ import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
 import { revalidatePath } from "next/cache";
 import jwt from "jsonwebtoken";
-import { dataSparepartParams } from "@/types";
+import { dataPenawaranParams } from "@/types";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const path = request.nextUrl.pathname;
     revalidatePath(path);
-    const data = await prisma.dataSparepart.findMany();
+    const data = await prisma.penawaran.findMany();
     const getData = JSON.parse(JSON.stringify(data));
     return NextResponse.json(
       {
@@ -40,33 +40,38 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     connectToDatabase();
-    const data: dataSparepartParams = await request.json();
+    const data: dataPenawaranParams = await request.json();
     const token = request.headers.get("Authorization") || "";
     if (token) {
       var decoded: any = jwt.verify(token, process.env.NEXTAUTH_SECRET || "");
       if (decoded) {
-        const existingDataSparepart = await prisma.dataSparepart.findFirst({
-          where: { sparepart: data.sparepart },
+        const existingPenawaran = await prisma.penawaran.findFirst({
+          where: { nopnw: data.nopnw },
         });
-        if (existingDataSparepart) {
+        if (existingPenawaran) {
           return NextResponse.json(
             {
-              message: "Data sparepart already exists in the Database",
+              message: "Penawaran already exists in the Database",
             },
             {
               status: 400,
             }
           );
         }
-        const datasparepart = await prisma.dataSparepart.create({
-          data: data,
+        const datapenawaran = await prisma.penawaran.create({
+          data: {
+            nopnw: data.nopnw,
+            qty: data.qty,
+            sparepartId: data.sparepartId,
+            ket: data.ket,
+          },
         });
         const path = request.nextUrl.pathname;
         revalidatePath(path);
         return NextResponse.json(
           {
             message: "Success",
-            Data: datasparepart,
+            Data: datapenawaran,
           },
           {
             status: 200,

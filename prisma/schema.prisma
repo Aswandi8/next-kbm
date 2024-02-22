@@ -29,23 +29,119 @@ model dataSparepart{
   merek         String?
   stock         Int
   spesifikasi   String
+  garansis      garansi[]
+  PrMarketings  PrMarketing[]
+  dataSurveys   dataSurvey[]
+  trackings     tracking[]
+  urgents       urgent[]
+  penawarans    penawaran[]
   imageUrl      String[] 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now())
   
 }
 
-// model dataType{
-//   id           String    @id @default(auto()) @map("_id") @db.ObjectId
-//   type         String
-//   merek        String?
-//   stock        Int
-//   spesifikasi  String
-//   product      dataSparepart   @relation(fields: [productId], references: [id])
-//   productId    String          @db.ObjectId
-//   createdAt    DateTime  @default(now())
-//   updatedAt    DateTime  @default(now())
-// }
+model garansi{
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  qty           Int    
+  nogaransi     String        @unique
+  spareparts    dataSparepart @relation(fields: [sparepartId], references: [id])
+  sparepartId   String        @db.ObjectId
+  ket           String    
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now())
+  
+}
+model PrMarketing{
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  qty           Int           
+  noPR          String        @unique
+  spareparts    dataSparepart @relation(fields: [sparepartId], references: [id])
+  sparepartId   String        @db.ObjectId
+  rekanans      rekanan       @relation(fields: [rekananId], references: [id])
+  rekananId     String        @db.ObjectId
+  ket           String        
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now())
+  
+}
+model dataSurvey{
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  qty           Int     
+  nosurvey      String        @unique
+  spareparts    dataSparepart @relation(fields: [sparepartId], references: [id])
+  sparepartId   String        @db.ObjectId
+  rekanans      rekanan       @relation(fields: [rekananId], references: [id])
+  rekananId     String        @db.ObjectId
+  ket           String        
+  unit          String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now())
+  
+}
+model urgent{
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  qty           Int  
+  nourgent      String        @unique
+  spareparts    dataSparepart @relation(fields: [sparepartId], references: [id])
+  sparepartId   String        @db.ObjectId   
+  ket           String        
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now())
+  
+}
+model tracking{
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  notracking    String         @unique
+  spareparts    dataSparepart  @relation(fields: [sparepartId], references: [id])
+  sparepartId   String         @db.ObjectId
+  rekanans      rekanan        @relation(fields: [rekananId], references: [id])
+  rekananId     String         @db.ObjectId
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  
+}
+
+model penawaran{
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  nopnw         String         @unique
+  spareparts    dataSparepart  @relation(fields: [sparepartId], references: [id])
+  sparepartId   String         @db.ObjectId
+  qty           Int     
+  ket           String    
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  
+}
+model rekanan{
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  nama          String         @unique
+  unit           Int
+  prmarketings  PrMarketing[]
+  trackings     tracking[]
+  datasurveys   dataSurvey[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

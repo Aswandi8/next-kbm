@@ -3,7 +3,7 @@ import { connectToDatabase } from "@/lib/database";
 import prisma from "@/prisma";
 import { revalidatePath } from "next/cache";
 import jwt from "jsonwebtoken";
-import { dataSparepartParams } from "@/types";
+import { dataSurveyParams } from "@/types";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const path = request.nextUrl.pathname;
     revalidatePath(path);
-    const data = await prisma.dataSparepart.findMany();
+    const data = await prisma.dataSurvey.findMany();
     const getData = JSON.parse(JSON.stringify(data));
     return NextResponse.json(
       {
@@ -40,33 +40,40 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     connectToDatabase();
-    const data: dataSparepartParams = await request.json();
+    const data: dataSurveyParams = await request.json();
     const token = request.headers.get("Authorization") || "";
     if (token) {
       var decoded: any = jwt.verify(token, process.env.NEXTAUTH_SECRET || "");
       if (decoded) {
-        const existingDataSparepart = await prisma.dataSparepart.findFirst({
-          where: { sparepart: data.sparepart },
+        const existingSurvey = await prisma.dataSurvey.findFirst({
+          where: { nosurvey: data.nosurvey },
         });
-        if (existingDataSparepart) {
+        if (existingSurvey) {
           return NextResponse.json(
             {
-              message: "Data sparepart already exists in the Database",
+              message: "No.Survey already exists in the Database",
             },
             {
               status: 400,
             }
           );
         }
-        const datasparepart = await prisma.dataSparepart.create({
-          data: data,
+        const dataSurvey = await prisma.dataSurvey.create({
+          data: {
+            sparepartId: data.sparepartId,
+            rekananId: data.rekananId,
+            qty: data.qty,
+            ket: data.ket,
+            unit: data.unit,
+            nosurvey: data.nosurvey,
+          },
         });
         const path = request.nextUrl.pathname;
         revalidatePath(path);
         return NextResponse.json(
           {
             message: "Success",
-            Data: datasparepart,
+            Data: dataSurvey,
           },
           {
             status: 200,
