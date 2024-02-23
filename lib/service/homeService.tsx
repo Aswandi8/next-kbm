@@ -3,11 +3,13 @@ import { connectToDatabase } from "../database";
 import { GetRelatedEventsByCategoryParams } from "@/types";
 
 type GetAllEventsParams = {
+  kriteria: string | string[];
   query: string;
   limit: number;
   page: number;
 };
 export async function getAllKost({
+  kriteria,
   query,
   limit = 6,
   page,

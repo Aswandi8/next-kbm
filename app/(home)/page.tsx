@@ -4,16 +4,23 @@ import MyButton from "../components/ui/button";
 import MyHeading from "../components/ui/heading";
 import MyImage from "../components/ui/image";
 import MyParagraph from "../components/ui/paragraph";
-type SearchParamProps = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+import { SearchParamProps } from "@/types";
+import KriteriaFilter from "../components/home/kriteria";
+import { useRouter } from "next/navigation";
 export default async function Home({ searchParams }: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) || "";
+  const kriterias = (searchParams?.kriteria as string) || "";
+  const kriteria = Array.isArray(searchParams?.kriteria)
+    ? searchParams.kriteria
+    : searchParams?.kriteria
+    ? [searchParams.kriteria]
+    : [];
+  console.log("Kriteria Value:", kriteria);
 
   const events = await getAllKost({
     query: searchText,
+    kriteria,
     page,
     limit: 6,
   });
@@ -51,9 +58,8 @@ export default async function Home({ searchParams }: SearchParamProps) {
           <h2 className="text-xl lg:text-4xl  font-bold">
             Pilih dengan percaya <br /> Hiduplah dengan nyaman
           </h2>
-          <div className="flex w-full flex-col gap-5 md:flex-row items-center">
-            {/* <Search /> */}
-            {/* <CategoryFilter /> */}
+          <div className="">
+            <KriteriaFilter />
           </div>
           <Collection
             data={events?.data}
