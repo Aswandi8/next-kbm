@@ -47,15 +47,13 @@ const KriteriaFilter = () => {
     console.log("Selected values:", selectedValues);
 
     // Build a new URL query string based on the selected values
-    const newUrlQuery = selectedValues
-      .map((value, index) => {
-        return formUrlQuery({
-          params: searchParams.toString(),
-          key: `kriteria${index}`, // Use a unique key for each selected value
-          value: value,
-        });
-      })
-      .join("&");
+    const newUrlQuery = selectedValues.map((value, index) => {
+      return formUrlQuery({
+        params: searchParams.toString(),
+        key: `kriteria${index}`, // Use a unique key for each selected value
+        value: value,
+      });
+    });
 
     // Combine the new query string with the existing query parameters
     const newUrl = `${newUrlQuery}/`;
